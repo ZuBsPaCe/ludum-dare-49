@@ -17,13 +17,16 @@ var state:int = GameState.NONE
 
 
 func _ready():
-
 	Globals.setup(
 		$Camera2D,
 		$EntityContainer,
 		player_scene,
 		bullet_scene,
 		monster_scene
+	)
+	
+	Mapper.setup(
+		$TileMap
 	)
 	
 	Status.setup(
@@ -78,8 +81,8 @@ func start_level():
 	
 	var map := Map.new(30, 17)
 	
-	Generator.generate_map(map, $TileMap)
-	Generator.fill_tilemap(map, $TileMap)
+	Mapper.generate_map(map, $TileMap)
+	Mapper.fill_tilemap(map, $TileMap)
 	
 	Globals.map = map
 	

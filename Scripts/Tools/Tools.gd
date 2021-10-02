@@ -27,6 +27,16 @@ func step_dir(coord:Coord, dir) -> Coord:
 			assert(false)
 			return null
 			
+func step_diagonal(coord:Coord, dir1, dir2) -> Coord:
+	if dir1 == Direction.N && dir2 == Direction.E || dir1 == Direction.E && dir2 == Direction.N:
+		return Coord.new(coord.x + 1, coord.y - 1)
+	elif dir1 == Direction.E && dir2 == Direction.S || dir1 == Direction.S && dir2 == Direction.E:
+		return Coord.new(coord.x + 1, coord.y + 1)
+	elif dir1 == Direction.S && dir2 == Direction.W || dir1 == Direction.W && dir2 == Direction.S:
+		return Coord.new(coord.x - 1, coord.y + 1)
+	else:
+		return Coord.new(coord.x - 1, coord.y - 1)
+	
 
 func is_reverse(dir1, dir2) -> bool:
 	return (

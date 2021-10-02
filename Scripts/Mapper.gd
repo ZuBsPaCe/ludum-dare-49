@@ -4,9 +4,16 @@ extends Node
 const TileType := preload("res://Scripts/TileType.gd").TileType
 const Direction := preload("res://Scripts/Tools/Direction.gd").Direction
 
+var _tilemap:TileMap
+var _map:Map
+
 
 func _ready():
 	pass
+	
+func setup(
+	p_tilemap:TileMap):
+	_tilemap = p_tilemap
 
 
 func generate_map(map:Map, tilemap:TileMap):
@@ -262,23 +269,35 @@ func _can_floor(map:Map, coord:Coord) -> bool:
 	return true
 			
 				
+func set_tile(x:int, y:int, tiletype):
+	_map.set_item(x, y, tiletype)
+	_set_tile_on_tilemap(x, y, tiletype)
+
+			
+
+func _set_tile_on_tilemap(x:int, y:int, tiletype):
+	match tiletype:
+		TileType.WALL:
+			_tilemap.set_cell(x, y, 0)
+
+		TileType.FLOOR:
+			_tilemap.set_cell(x, y, 1)
+			
+		TileType.BLOCKED_WALL:
+			_tilemap.set_cell(x, y, 0)
+			
+		TileType.BLOCKED_FLOOR:
+			_tilemap.set_cell(x, y, 1)
+
+		_:
+			assert(false)
+			pass
+
 
 func fill_tilemap(map:Map, tilemap:TileMap):
+	_map = map
+	
 	for y in map.height:
 		for x in map.width:
-			var tileType = map.get_item(x, y)
-
-			match tileType:
-				TileType.WALL:
-					tilemap.set_cell(x, y, 0)
-#				TileType.BLOCKED_WALL:
-#					tilemap.set_cell(x, y, 0)
-				TileType.FLOOR:
-					tilemap.set_cell(x, y, 1)
-#				TileType.BLOCKED_FLOOR:
-#					tilemap.set_cell(x, y, 1)
-
-				_:
-					assert(false)
-					pass
-
+			_set_tile_on_tilemap(x, y, map.get_item(x, y))
+			

@@ -37,6 +37,9 @@ func _on_Bullet_body_entered(body):
 		body.hurt()
 		queue_free()
 	else:
+		if body.is_in_group("Tilemap"):
+			Globals.hurt_tile(position)
+		
 		linear_damp = 3.0
 		_start_fade()
 

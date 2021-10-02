@@ -121,7 +121,9 @@ visible = false
 material = ExtResource( 3 )
 texture = SubResource( 1 )
 
-[node name="TileMap" type="TileMap" parent="."]
+[node name="TileMap" type="TileMap" parent="." groups=[
+"Tilemap",
+]]
 tile_set = SubResource( 2 )
 cell_size = Vector2( 16, 16 )
 collision_mask = 0
