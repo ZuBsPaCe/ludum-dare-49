@@ -29,7 +29,7 @@ func setup(p_pos:Vector2, p_dir:Vector2):
 
 
 func _on_Bullet_body_entered(body):
-	linear_damp = 3.0
+
 
 	
 	# var tween := Tween.new()
@@ -49,4 +49,10 @@ func _on_Bullet_body_entered(body):
 	# yield(tween, "tween_completed")
 	
 	# queue_free()
+	
+	if body.is_in_group("Monster"):
+		body.hurt()
+		queue_free()
+	else:
+		linear_damp = 3.0
 

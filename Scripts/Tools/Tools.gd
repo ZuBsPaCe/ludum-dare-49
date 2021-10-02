@@ -1,8 +1,6 @@
 extends Node2D
 
 
-var NO_ALPHA = Color(1.0, 1.0, 1.0, 0.0)
-
 
 var _raycast : RayCast2D
 
@@ -13,6 +11,13 @@ func _ready():
 	add_child(_raycast)
 
 
+# Color Helpers
+
+func get_alpha_1(color: Color) -> Color:
+	return Color(color.r, color.g, color.b, 1.0)
+
+func get_alpha_0(color: Color) -> Color:
+	return Color(color.r, color.g, color.b, 0.0)
 
 # Array Helpers
 

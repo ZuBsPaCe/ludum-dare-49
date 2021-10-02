@@ -3,6 +3,7 @@ extends Node
 var _enity_container
 var _player_scene: PackedScene
 var _bullet_scene: PackedScene
+var _monster_scene: PackedScene
 
 var camera: Camera2D
 var player: KinematicBody2D
@@ -19,11 +20,13 @@ func setup(
 	p_camera: Camera2D,
 	p_entity_container,
 	p_player_scene: PackedScene,
-	p_bullet_scene: PackedScene):
+	p_bullet_scene: PackedScene,
+	p_monster_scene: PackedScene):
 
 	camera = p_camera
 	_enity_container = p_entity_container
 	_player_scene = p_player_scene
+	_monster_scene = p_monster_scene
 	_bullet_scene = p_bullet_scene
 
 func create_player(pos: Vector2) -> void:
@@ -40,6 +43,11 @@ func create_bullet(pos: Vector2, dir: Vector2) -> void:
 	var bullet = _bullet_scene.instance()
 	bullet.setup(pos, dir)
 	_enity_container.add_child(bullet)
+
+func create_monster(pos: Vector2) -> void:
+	var monster = _monster_scene.instance()
+	monster.setup(pos)
+	_enity_container.add_child(monster)
 
 
 

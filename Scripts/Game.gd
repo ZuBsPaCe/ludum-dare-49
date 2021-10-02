@@ -9,6 +9,7 @@ enum GameState {
 
 export var player_scene:PackedScene
 export var bullet_scene:PackedScene
+export var monster_scene:PackedScene
 
 
 var state:int = GameState.NONE
@@ -20,7 +21,8 @@ func _ready():
 		$Camera2D,
 		$EntityContainer,
 		player_scene,
-		bullet_scene
+		bullet_scene,
+		monster_scene
 	)
 	
 	switch_game_state(GameState.GAME)
@@ -58,3 +60,4 @@ func switch_game_state(new_state) -> void:
 
 func start_game():
 	Globals.create_player(Vector2.ZERO)
+	Globals.create_monster(Vector2(3.0, 0.0))

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Scripts/Game.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/Tools/CameraShake.gd" type="Script" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://Prefabs/Player.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Sprites/Floor/Floor.png" type="Texture" id=6]
 [ext_resource path="res://Prefabs/Bullet.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Prefabs/Monster.tscn" type="PackedScene" id=8]
 
 [sub_resource type="ViewportTexture" id=1]
 viewport_path = NodePath("ShadowViewport")
@@ -55,6 +56,7 @@ points = PoolVector2Array( 0, 0, 16, 0, 16, 16, 0, 16 )
 script = ExtResource( 1 )
 player_scene = ExtResource( 5 )
 bullet_scene = ExtResource( 7 )
+monster_scene = ExtResource( 8 )
 
 [node name="ShadowViewport" type="Viewport" parent="."]
 size = Vector2( 1024, 1024 )
