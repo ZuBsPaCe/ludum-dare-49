@@ -51,6 +51,7 @@ config/windows_native_icon="res://Sprites/Icon/icon.ico"
 Globals="*res://Scripts/Globals.gd"
 Tools="*res://Scripts/Tools/Tools.gd"
 Generator="*res://Scripts/Generator.gd"
+Status="*res://Scripts/Status.gd"
 
 [display]
 

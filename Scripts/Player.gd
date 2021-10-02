@@ -72,5 +72,7 @@ func _physics_process(_delta):
 		move_and_slide(_target_velocity)
 		
 		
-	
-	
+
+func _on_HurtArea2D_body_entered(body):
+	if body.is_in_group("Monster"):
+		Status.hurt_player()

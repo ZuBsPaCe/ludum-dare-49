@@ -3,7 +3,8 @@ extends Node2D
 enum GameState {
 	NONE,
 	MAIN_MENU,
-	GAME
+	NEW_GAME,
+	LEVEL
 }
 
 
@@ -25,7 +26,12 @@ func _ready():
 		monster_scene
 	)
 	
-	switch_game_state(GameState.GAME)
+	Status.setup(
+		$GameOverlay/MarginContainer/HBoxContainer/HBoxContainer/TexHeart1,
+		$GameOverlay/MarginContainer/HBoxContainer/HBoxContainer/TexHeart2,
+		$GameOverlay/MarginContainer/HBoxContainer/HBoxContainer/TexHeart3)
+	
+	switch_game_state(GameState.NEW_GAME)
 
 
 func switch_game_state(new_state) -> void:
@@ -36,7 +42,7 @@ func switch_game_state(new_state) -> void:
 		GameState.MAIN_MENU:
 			pass
 
-		GameState.GAME:
+		GameState.NEW_GAME:
 			pass
 
 		GameState.NONE:
@@ -51,14 +57,25 @@ func switch_game_state(new_state) -> void:
 		GameState.MAIN_MENU:
 			pass
 
-		GameState.GAME:
+		GameState.NEW_GAME:
 			start_game()
+			
+		GameState.LEVEL:
+			start_level()
 
 		_:
 			assert(false, "Unknown game state %s" % new_state)
 			
-
 func start_game():
+	Status.start_game()
+	
+	switch_game_state(GameState.LEVEL)
+
+
+func start_level():
+	Status.start_level()
+	
+	
 	var map := Map.new(30, 17)
 	
 	Generator.generate_map(map, $TileMap)
@@ -68,7 +85,7 @@ func start_game():
 	
 	Globals.create_player(map.player_spawn_coord.to_center_pos())
 	
-	for i in range(5):
+	for _i in range(5):
 		var spawn_coord:Coord = Tools.rand_item(map.monster_spawn_coords)
 		Globals.create_monster(spawn_coord.to_center_pos())
 	

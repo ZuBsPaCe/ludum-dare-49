@@ -10,7 +10,7 @@ var _fade:bool
 func _ready():
 	pass
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if _start:
 		_start = false
 		modulate.a = 1.0
@@ -46,6 +46,7 @@ func _start_fade():
 	var tween := Tween.new()
 	add_child(tween)
 
+	# warning-ignore:return_value_discarded
 	tween.interpolate_property(
 		self,
 		"modulate",
@@ -55,6 +56,7 @@ func _start_fade():
 		Tween.TRANS_LINEAR, 
 		Tween.EASE_IN_OUT)
 		
+	# warning-ignore:return_value_discarded
 	tween.start()
 
 	yield(tween, "tween_completed")

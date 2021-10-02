@@ -46,7 +46,9 @@ func generate_map(map:Map, tilemap:TileMap):
 
 
 
+	# warning-ignore:integer_division
 	var center_x = map.width / 2
+	# warning-ignore:integer_division
 	var center_y = map.height / 2
 	
 
@@ -187,6 +189,7 @@ func generate_map(map:Map, tilemap:TileMap):
 				possible_player_x.append(x)
 		
 		if possible_player_x.size() > 0:
+			# warning-ignore:integer_division
 			var index = possible_player_x.size() / 2
 			map.player_spawn_coord = Coord.new(possible_player_x[index], y)
 			break

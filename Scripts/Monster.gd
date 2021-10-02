@@ -31,7 +31,7 @@ func setup(pos:Vector2):
 	_health = 3
 	
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if !_update_target_pos:
 		match _dir:
 			Direction.N:
@@ -70,6 +70,7 @@ func _physics_process(delta):
 			if _try_set_target_pos(current_pos, check_dir):
 				break
 	
+	# warning-ignore:return_value_discarded
 	move_and_slide(_target_velocity)
 
 func _try_set_target_pos(current_pos:Coord, dir) -> bool:
@@ -98,6 +99,7 @@ func hurt():
 	var tween := Tween.new()
 	add_child(tween)
 
+	# warning-ignore:return_value_discarded
 	tween.interpolate_property(
 		_glow_sprite,
 		"modulate",
@@ -107,6 +109,7 @@ func hurt():
 		Tween.TRANS_LINEAR, 
 		Tween.EASE_IN_OUT)
 		
+	# warning-ignore:return_value_discarded
 	tween.start()
 
 	yield(tween, "tween_completed")

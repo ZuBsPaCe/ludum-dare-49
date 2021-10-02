@@ -10,13 +10,13 @@ var time_left:float setget ,_get_time_left
 
 var _timer: Timer
 
-enum TimerAutoStart {
+enum {
 	AUTO_START,
 	STOPPED
 }
 
 
-func setup(p_parent_node: Node, p_secs: float, p_done: bool, auto_start = TimerAutoStart.AUTO_START):
+func setup(p_parent_node: Node, p_secs: float, p_done: bool, auto_start = AUTO_START):
 	done = p_done
 
 	secs = p_secs
@@ -25,7 +25,7 @@ func setup(p_parent_node: Node, p_secs: float, p_done: bool, auto_start = TimerA
 	_timer.wait_time = p_secs
 	_timer.one_shot = true
 
-	if !done && auto_start == TimerAutoStart.AUTO_START:
+	if !done && auto_start == AUTO_START:
 		_timer.autostart = true
 
 	# warning-ignore:return_value_discarded
