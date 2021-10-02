@@ -8,6 +8,10 @@ enum GameState {
 
 
 export var player_scene:PackedScene
+export var bullet_scene:PackedScene
+
+
+var state:int = GameState.NONE
 
 
 func _ready():
@@ -15,19 +19,42 @@ func _ready():
 	Globals.setup(
 		$Camera2D,
 		$EntityContainer,
-		player_scene
+		player_scene,
+		bullet_scene
 	)
 	
-	switch_game_state(GameState.MAIN_MENU)
+	switch_game_state(GameState.GAME)
 
 
 func switch_game_state(new_state) -> void:
-	match new_state:
+	if state == new_state:
+		return
+		
+	match state:
 		GameState.MAIN_MENU:
 			pass
 
 		GameState.GAME:
 			pass
 
+		GameState.NONE:
+			pass
+			
 		_:
 			assert(false, "Unknown game state %s" % new_state)
+	
+	state = new_state
+	
+	match new_state:
+		GameState.MAIN_MENU:
+			pass
+
+		GameState.GAME:
+			start_game()
+
+		_:
+			assert(false, "Unknown game state %s" % new_state)
+			
+
+func start_game():
+	Globals.create_player(Vector2.ZERO)
