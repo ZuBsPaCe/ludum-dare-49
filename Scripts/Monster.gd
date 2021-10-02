@@ -90,7 +90,7 @@ func hurt():
 	_health -= 1
 		
 	if _health == 0:
-		queue_free()
+		Globals.destroy_monster(self)
 		return
 		
 	

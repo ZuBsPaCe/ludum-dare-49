@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Sprites/Orb/Orb.png" type="Texture" id=1]
+
+[node name="Orb" type="Sprite"]
+modulate = Color( 0.858824, 0.929412, 0.372549, 1 )
+texture = ExtResource( 1 )
+offset = Vector2( 0, -2 )

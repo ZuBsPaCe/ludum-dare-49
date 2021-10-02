@@ -4,10 +4,12 @@ const TileType := preload("res://Scripts/TileType.gd").TileType
 const Direction := preload("res://Scripts/Tools/Direction.gd").Direction
 
 var _enity_container
+var _drop_container
 
 var _player_scene:PackedScene
 var _bullet_scene:PackedScene
 var _monster_scene:PackedScene
+var _orb_scene:PackedScene
 
 var camera:Camera2D
 var player:KinematicBody2D
@@ -25,15 +27,19 @@ func _ready():
 func setup(
 	p_camera: Camera2D,
 	p_entity_container,
+	p_drop_container,
 	p_player_scene: PackedScene,
 	p_bullet_scene: PackedScene,
-	p_monster_scene: PackedScene):
+	p_monster_scene: PackedScene,
+	p_orb_scene: PackedScene):
 
 	camera = p_camera
 	_enity_container = p_entity_container
+	_drop_container = p_drop_container
 	_player_scene = p_player_scene
 	_monster_scene = p_monster_scene
 	_bullet_scene = p_bullet_scene
+	_orb_scene = p_orb_scene
 
 func create_player(pos: Vector2) -> void:
 	assert(player == null)
@@ -43,18 +49,35 @@ func create_player(pos: Vector2) -> void:
 
 func destroy_player() -> void:
 	_enity_container.remove_child(player)
+	player.queue_free()
 	player = null
 
 func create_bullet(pos: Vector2, dir: Vector2) -> void:
 	var bullet = _bullet_scene.instance()
 	bullet.setup(pos, dir)
 	_enity_container.add_child(bullet)
+	
+func destroy_bullet(bullet):
+	_enity_container.remove_child(bullet)
+	bullet.queue_free()
 
 func create_monster(pos: Vector2) -> void:
 	var monster = _monster_scene.instance()
 	monster.setup(pos)
 	_enity_container.add_child(monster)
+	
+func destroy_monster(monster) -> void:
+	_enity_container.remove_child(monster)
+	monster.queue_free()
 
+func create_orb(pos: Vector2) -> void:
+	var orb = _orb_scene.instance()
+	orb.position = pos
+	_drop_container.add_child(orb)
+	
+func destroy_orb(orb) -> void:
+	_drop_container.remove_child(orb)
+	orb.queue_free()
 
 
 func shake(dir: Vector2) -> void:

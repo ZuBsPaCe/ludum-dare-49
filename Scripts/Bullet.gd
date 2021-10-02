@@ -35,7 +35,7 @@ func _on_Bullet_body_entered(body):
 	
 	if body.is_in_group("Monster"):
 		body.hurt()
-		queue_free()
+		Globals.destroy_bullet(self)
 	else:
 		if body.is_in_group("Tilemap"):
 			Globals.hurt_tile(position)
@@ -64,4 +64,4 @@ func _start_fade():
 
 	yield(tween, "tween_completed")
 	
-	queue_free()
+	Globals.destroy_bullet(self)

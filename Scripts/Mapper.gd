@@ -16,7 +16,7 @@ func setup(
 	_tilemap = p_tilemap
 
 
-func generate_map(map:Map, tilemap:TileMap):
+func generate_map(map:Map):
 	randomize()
 	var random_seed = randi()
 	random_seed = 1476648211
@@ -181,10 +181,10 @@ func generate_map(map:Map, tilemap:TileMap):
 			match map.get_item(x, y):
 				TileType.BLOCKED_WALL:
 					map.set_item(x, y, TileType.WALL)
-					tilemap.set_cell(x, y, 0)
+#					tilemap.set_cell(x, y, 0)
 				TileType.BLOCKED_FLOOR:
 					map.set_item(x, y, TileType.FLOOR)
-					tilemap.set_cell(x, y, 1)
+#					tilemap.set_cell(x, y, 1)
 	
 	var possible_player_x := []
 	
@@ -294,10 +294,18 @@ func _set_tile_on_tilemap(x:int, y:int, tiletype):
 			pass
 
 
-func fill_tilemap(map:Map, tilemap:TileMap):
+func fill_tilemap(map:Map):
 	_map = map
+	
+	var coord := Coord.new()
 	
 	for y in map.height:
 		for x in map.width:
-			_set_tile_on_tilemap(x, y, map.get_item(x, y))
+			var tiletype = map.get_item(x, y)
+			_set_tile_on_tilemap(x, y, tiletype)
+			
+			if tiletype == TileType.FLOOR:
+				coord.x = x
+				coord.y = y
+				Globals.create_orb(coord.to_center_pos())
 			

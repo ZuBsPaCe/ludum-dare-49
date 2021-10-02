@@ -19,18 +19,19 @@ script = ExtResource( 2 )
 speed = 50.0
 
 [node name="Sprite" type="Sprite" parent="."]
-position = Vector2( 0, -7 )
+position = Vector2( 0, -3 )
 texture = ExtResource( 1 )
+offset = Vector2( 0, -3.5 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 0, -5 )
 shape = SubResource( 1 )
 
 [node name="WeaponRight" parent="." instance=ExtResource( 3 )]
-position = Vector2( 6, -6 )
+position = Vector2( 6, -5 )
 
 [node name="WeaponLeft" parent="." instance=ExtResource( 3 )]
-position = Vector2( -6, -6 )
+position = Vector2( -6, -5 )
 scale = Vector2( -1, 1 )
 
 [node name="Center" type="Node2D" parent="."]

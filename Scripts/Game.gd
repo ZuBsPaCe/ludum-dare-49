@@ -11,6 +11,7 @@ enum GameState {
 export var player_scene:PackedScene
 export var bullet_scene:PackedScene
 export var monster_scene:PackedScene
+export var orb_scene:PackedScene
 
 
 var state:int = GameState.NONE
@@ -20,9 +21,11 @@ func _ready():
 	Globals.setup(
 		$Camera2D,
 		$EntityContainer,
+		$DropContainer,
 		player_scene,
 		bullet_scene,
-		monster_scene
+		monster_scene,
+		orb_scene
 	)
 	
 	Mapper.setup(
@@ -81,8 +84,8 @@ func start_level():
 	
 	var map := Map.new(30, 17)
 	
-	Mapper.generate_map(map, $TileMap)
-	Mapper.fill_tilemap(map, $TileMap)
+	Mapper.generate_map(map)
+	Mapper.fill_tilemap(map)
 	
 	Globals.map = map
 	
