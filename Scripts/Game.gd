@@ -36,7 +36,10 @@ func _ready():
 		$GameOverlay/MarginContainer/GridContainer/HBoxContainer/TexHeart1,
 		$GameOverlay/MarginContainer/GridContainer/HBoxContainer/TexHeart2,
 		$GameOverlay/MarginContainer/GridContainer/HBoxContainer/TexHeart3,
-		$GameOverlay/MarginContainer/GridContainer/HBoxContainer2/CoinLabel)
+		$GameOverlay/MarginContainer/GridContainer/HBoxContainer2/CoinLabel,
+		$GameOverlay/MarginContainer/GridContainer/HBoxContainer3/MagsLabel,
+		$GameOverlay/MarginContainer/GridContainer/HBoxContainer3/RoundsContainer/RoundsRectFront,
+		$GameOverlay/MarginContainer/GridContainer/HBoxContainer3/RoundsContainer/RoundsRectBack)
 	
 	switch_game_state(GameState.NEW_GAME)
 

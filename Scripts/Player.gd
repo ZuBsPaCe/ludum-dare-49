@@ -11,10 +11,9 @@ onready var _center := $Center
 var _target_velocity := Vector2.ZERO
 var _current_coord := Coord.new()
 
-var _shoot_cooldown := Cooldown.new()
 
 func _ready():
-	_shoot_cooldown.setup(self, 0.5, true)
+	pass
 	
 	
 func setup(pos:Vector2):
@@ -56,12 +55,17 @@ func _process(_delta):
 	var weapon_dir:Vector2 = (get_global_mouse_position() - weapon.global_position).normalized()
 	weapon.rotation = base_angle.angle_to(weapon_dir)
 
-	if Input.is_action_pressed("left_click") && _shoot_cooldown.done:
-		_shoot_cooldown.restart()
-		
-		
-		Globals.shake(weapon_dir)
-		Globals.create_bullet(weapon.global_position, weapon_dir)
+	if Input.is_action_pressed("left_click"):
+		if Status.try_fire():
+			Globals.shake(weapon_dir)
+			Globals.create_bullet(weapon.global_position, weapon_dir)
+
+func _input(event):
+	if Input.is_action_pressed("next_weapon"):
+		Status.select_next_weapon()
+	elif Input.is_action_pressed("prev_weapon"):
+		Status.select_prev_weapon()
+
 
 
 func _physics_process(_delta):
