@@ -1,5 +1,6 @@
 enum TileType {
-	BLOCKED,
+	BLOCKED_WALL,
+	BLOCKED_FLOOR
 	FLOOR,
 	WALL
 }
