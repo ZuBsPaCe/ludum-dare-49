@@ -59,5 +59,10 @@ func switch_game_state(new_state) -> void:
 			
 
 func start_game():
+	var map := Map.new(30, 17)
+	
+	Generator.generate_map(map, $TileMap)
+	Generator.fill_tilemap(map, $TileMap)
+	
 	Globals.create_player(Vector2.ZERO)
 	Globals.create_monster(Vector2(3.0, 0.0))

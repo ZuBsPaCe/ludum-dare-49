@@ -2,7 +2,7 @@ class_name Map
 extends Reference
 
 var width : int setget ,_get_width
-var height : int setget ,_get_width
+var height : int setget ,_get_height
 var size : int setget ,_get_size
 
 

@@ -1,6 +1,7 @@
 class_name Coord
 extends Reference
 
+
 const TILE_SIZE := 32.0
 const HALF_TILE_SIZE := TILE_SIZE / 2.0
 
@@ -46,6 +47,7 @@ func distance_squared_to(other : Coord) -> float:
 
 func manhattan_distance_to(other : Coord) -> float:
 	return abs(x - other.x) + abs(y - other.y)
+	
 
 func _to_string() -> String:
 	return "%d/%d" % [x, y]

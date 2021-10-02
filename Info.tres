@@ -1,3 +1,9 @@
+
+Tilesize: 16
+World: 480 x 270
+
+Tiles: 30 x 16 (16.875)
+
 Collision Layers
 
 Layer 1: Walls

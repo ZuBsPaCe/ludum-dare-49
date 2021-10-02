@@ -1,6 +1,6 @@
 extends Node2D
 
-
+const Direction := preload("res://Scripts/Tools/Direction.gd").Direction
 
 var _raycast : RayCast2D
 
@@ -10,6 +10,22 @@ func _ready():
 	_raycast.enabled = false
 	add_child(_raycast)
 
+
+# Map Helpers
+
+func step_dir(coord:Coord, dir) -> Coord:
+	match dir:
+		Direction.N:
+			return Coord.new(coord.x, coord.y - 1)
+		Direction.E:
+			return Coord.new(coord.x + 1, coord.y)
+		Direction.S:
+			return Coord.new(coord.x, coord.y + 1)
+		Direction.W:
+			return Coord.new(coord.x - 1, coord.y)
+		_:
+			assert(false)
+			return null
 
 # Color Helpers
 
