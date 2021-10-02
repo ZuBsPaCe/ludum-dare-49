@@ -14,6 +14,8 @@ var _update_target_pos := true
 var _target_velocity := Vector2.ZERO
 
 
+var _health:int
+
 func _ready():
 	pass
 
@@ -25,6 +27,8 @@ func setup(pos:Vector2):
 	_glow_sprite.visible = false
 	
 	_update_target_pos = true
+	
+	_health = 3
 	
 
 func _physics_process(delta):
@@ -79,6 +83,16 @@ func _try_set_target_pos(current_pos:Coord, dir) -> bool:
 	
 
 func hurt():
+	if _health <= 0:
+		return
+		
+	_health -= 1
+		
+	if _health == 0:
+		queue_free()
+		return
+		
+	
 	_glow_sprite.visible = true
 	
 	var tween := Tween.new()
