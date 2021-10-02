@@ -8,6 +8,8 @@ var _monster_scene: PackedScene
 var camera: Camera2D
 var player: KinematicBody2D
 
+var map:Map
+
 var _shake
 
 var _center_node: Node2D;

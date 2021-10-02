@@ -26,6 +26,41 @@ func step_dir(coord:Coord, dir) -> Coord:
 		_:
 			assert(false)
 			return null
+			
+
+func is_reverse(dir1, dir2) -> bool:
+	return (
+		dir1 == Direction.N && dir2 == Direction.S ||
+		dir1 == Direction.S && dir2 == Direction.N ||
+		dir1 == Direction.E && dir2 == Direction.W ||
+		dir1 == Direction.W && dir2 == Direction.E)
+		
+func turn_left(dir) -> int:
+	if dir >= 1:
+		return dir - 1
+	return 3
+	
+func turn_right(dir) -> int:
+	if dir < 3:
+		return dir + 1
+	return 0
+	
+func reverse(dir) -> int:
+	return (dir + 2) % 4
+	
+		
+func get_vec_from_dir(dir) -> Vector2:
+	match dir:
+		Direction.N:
+			return Vector2.UP
+		Direction.E:
+			return Vector2.RIGHT
+		Direction.S:
+			return Vector2.DOWN
+		Direction.W:
+			return Vector2.LEFT
+		_:
+			return Vector2.ZERO
 
 # Color Helpers
 

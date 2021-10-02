@@ -64,5 +64,12 @@ func start_game():
 	Generator.generate_map(map, $TileMap)
 	Generator.fill_tilemap(map, $TileMap)
 	
-	Globals.create_player(Vector2.ZERO)
-	Globals.create_monster(Vector2(3.0, 0.0))
+	Globals.map = map
+	
+	Globals.create_player(map.player_spawn_coord.to_center_pos())
+	
+	for i in range(5):
+		var spawn_coord:Coord = Tools.rand_item(map.monster_spawn_coords)
+		Globals.create_monster(spawn_coord.to_center_pos())
+	
+	

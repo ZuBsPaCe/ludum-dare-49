@@ -2,7 +2,7 @@ class_name Coord
 extends Reference
 
 
-const TILE_SIZE := 32.0
+const TILE_SIZE := 16.0
 const HALF_TILE_SIZE := TILE_SIZE / 2.0
 
 var x : int

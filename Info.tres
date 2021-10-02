@@ -8,6 +8,6 @@ Collision Layers
 
 Layer 1: Walls
 Layer 2: Player		(Mask: 1, 3, 5)
-Layer 3: Monsters	(Mask: 1, 2, 4)
+Layer 3: Monsters	(Mask: 2, 4) => Collision only used for bullets!
 Layer 4: Player Bullets		(Mask: 1, 3)
 Layer 5: Monster Bullets

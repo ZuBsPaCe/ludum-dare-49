@@ -55,9 +55,15 @@ func generate_map(map:Map, tilemap:TileMap):
 			if x == -2 || x == 2 || y == -1 || y == 1:
 				map.set_item(center_x + x, center_y + y, TileType.BLOCKED_WALL)
 			else:
-				map.set_item(center_x + x, center_y + y, TileType.BLOCKED_FLOOR)
+				var monster_spawn_coord := Coord.new(center_x + x, center_y + y)
+				map.set_item(monster_spawn_coord.x, monster_spawn_coord.y, TileType.BLOCKED_FLOOR)
+				map.monster_spawn_coords.append(monster_spawn_coord)
 
-
+	# Door
+	var door_coord := Coord.new(center_x,  center_y - 1)
+	map.set_item(door_coord.x, door_coord.y, TileType.FLOOR)
+	map.door_coords.append(door_coord)
+	
 	
 	map.set_item(center_x, center_y - 2, TileType.FLOOR)
 	heads.append(Coord.new(center_x, center_y - 2))
@@ -111,8 +117,8 @@ func generate_map(map:Map, tilemap:TileMap):
 		
 		var coord:Coord = floors.back()
 		
-		if coord.x == 29 && coord.y == 7:
-			pass
+#		if coord.x == 29 && coord.y == 7:
+#			pass
 
 		var is_outer := coord.x <= 1 || coord.y <= 1 || coord.x >= map.width - 2 || coord.y >= map.height - 2
 
@@ -170,6 +176,20 @@ func generate_map(map:Map, tilemap:TileMap):
 				TileType.BLOCKED_FLOOR:
 					map.set_item(x, y, TileType.FLOOR)
 					tilemap.set_cell(x, y, 1)
+	
+	var possible_player_x := []
+	
+	for y in range(map.height - 2, -1, -1):
+		possible_player_x.clear()
+		
+		for x in range(map.width):
+			if map.get_item(x, y) == TileType.FLOOR:
+				possible_player_x.append(x)
+		
+		if possible_player_x.size() > 0:
+			var index = possible_player_x.size() / 2
+			map.player_spawn_coord = Coord.new(possible_player_x[index], y)
+			break
 	
 	
 	print_debug("Generate Map Done!")
