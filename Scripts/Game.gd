@@ -33,9 +33,10 @@ func _ready():
 	)
 	
 	Status.setup(
-		$GameOverlay/MarginContainer/HBoxContainer/HBoxContainer/TexHeart1,
-		$GameOverlay/MarginContainer/HBoxContainer/HBoxContainer/TexHeart2,
-		$GameOverlay/MarginContainer/HBoxContainer/HBoxContainer/TexHeart3)
+		$GameOverlay/MarginContainer/GridContainer/HBoxContainer/TexHeart1,
+		$GameOverlay/MarginContainer/GridContainer/HBoxContainer/TexHeart2,
+		$GameOverlay/MarginContainer/GridContainer/HBoxContainer/TexHeart3,
+		$GameOverlay/MarginContainer/GridContainer/HBoxContainer2/CoinLabel)
 	
 	switch_game_state(GameState.NEW_GAME)
 

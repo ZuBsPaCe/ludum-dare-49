@@ -70,10 +70,11 @@ func destroy_monster(monster) -> void:
 	_enity_container.remove_child(monster)
 	monster.queue_free()
 
-func create_orb(pos: Vector2) -> void:
+func create_orb(pos: Vector2) -> Node2D:
 	var orb = _orb_scene.instance()
 	orb.position = pos
 	_drop_container.add_child(orb)
+	return orb
 	
 func destroy_orb(orb) -> void:
 	_drop_container.remove_child(orb)
@@ -166,6 +167,13 @@ func hurt_tile(pos: Vector2) -> void:
 				Mapper.set_tile(check_coord.x, check_coord.y, TileType.FLOOR)
 				break
 
+
+func try_pickup_orb(coord: Coord):
+	var orb = map.try_get_orb(coord.x, coord.y)
+	if orb != null:
+		destroy_orb(orb)
+		Status.add_coin()
+		
 
 func get_global_mouse_position() -> Vector2:
 	return _center_node.get_global_mouse_position()

@@ -307,5 +307,7 @@ func fill_tilemap(map:Map):
 			if tiletype == TileType.FLOOR:
 				coord.x = x
 				coord.y = y
-				Globals.create_orb(coord.to_center_pos())
-			
+				var orb = Globals.create_orb(coord.to_center_pos())
+				map.set_orb(x, y, orb)
+			else:
+				map.set_orb(x, y, null)

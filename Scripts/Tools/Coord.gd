@@ -19,6 +19,18 @@ func set_coord(other : Coord):
 func set_vector(pos : Vector2) -> void:
 	x = int(pos.x / TILE_SIZE)
 	y = int(pos.y / TILE_SIZE)
+	
+func set_vector_if_changed(pos : Vector2) -> bool:
+	var new_x = int(pos.x / TILE_SIZE)
+	var new_y = int(pos.y / TILE_SIZE)
+	
+	if new_x == x && new_y == y:
+		return false;
+		
+	x = new_x
+	y = new_y
+	return true
+
 
 func to_pos() -> Vector2:
 	return Vector2(

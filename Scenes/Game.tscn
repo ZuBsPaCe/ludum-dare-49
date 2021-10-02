@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Scripts/Game.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/Tools/CameraShake.gd" type="Script" id=2]
@@ -11,6 +11,8 @@
 [ext_resource path="res://Art/Test-480-270.png" type="Texture" id=9]
 [ext_resource path="res://Sprites/Heart/Heart-Full.png" type="Texture" id=10]
 [ext_resource path="res://Prefabs/Orb.tscn" type="PackedScene" id=11]
+[ext_resource path="res://Sprites/Coin/Coin.png" type="Texture" id=12]
+[ext_resource path="res://Themes/Overlay.tres" type="Theme" id=13]
 
 [sub_resource type="ViewportTexture" id=1]
 viewport_path = NodePath("ShadowViewport")
@@ -78,6 +80,7 @@ size = 960.0
 [node name="MarginContainer" type="MarginContainer" parent="GameOverlay"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+theme = ExtResource( 13 )
 custom_constants/margin_right = 5
 custom_constants/margin_top = 0
 custom_constants/margin_left = 5
@@ -86,32 +89,56 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer" type="HBoxContainer" parent="GameOverlay/MarginContainer"]
+[node name="GridContainer" type="GridContainer" parent="GameOverlay/MarginContainer"]
 margin_left = 5.0
 margin_right = 475.0
 margin_bottom = 265.0
+columns = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="GameOverlay/MarginContainer/HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="GameOverlay/MarginContainer/GridContainer"]
 margin_right = 48.0
-margin_bottom = 265.0
+margin_bottom = 16.0
 custom_constants/separation = 0
 
-[node name="TexHeart1" type="TextureRect" parent="GameOverlay/MarginContainer/HBoxContainer/HBoxContainer"]
+[node name="TexHeart1" type="TextureRect" parent="GameOverlay/MarginContainer/GridContainer/HBoxContainer"]
 margin_right = 16.0
-margin_bottom = 265.0
+margin_bottom = 16.0
 texture = ExtResource( 10 )
 
-[node name="TexHeart2" type="TextureRect" parent="GameOverlay/MarginContainer/HBoxContainer/HBoxContainer"]
+[node name="TexHeart2" type="TextureRect" parent="GameOverlay/MarginContainer/GridContainer/HBoxContainer"]
 margin_left = 16.0
 margin_right = 32.0
-margin_bottom = 265.0
+margin_bottom = 16.0
 texture = ExtResource( 10 )
 
-[node name="TexHeart3" type="TextureRect" parent="GameOverlay/MarginContainer/HBoxContainer/HBoxContainer"]
+[node name="TexHeart3" type="TextureRect" parent="GameOverlay/MarginContainer/GridContainer/HBoxContainer"]
 margin_left = 32.0
 margin_right = 48.0
-margin_bottom = 265.0
+margin_bottom = 16.0
 texture = ExtResource( 10 )
+
+[node name="Control" type="Control" parent="GameOverlay/MarginContainer/GridContainer"]
+margin_left = 52.0
+margin_right = 381.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="GameOverlay/MarginContainer/GridContainer"]
+margin_left = 385.0
+margin_right = 470.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 85, 0 )
+
+[node name="TexCoin" type="TextureRect" parent="GameOverlay/MarginContainer/GridContainer/HBoxContainer2"]
+margin_right = 16.0
+margin_bottom = 16.0
+texture = ExtResource( 12 )
+
+[node name="CoinLabel" type="Label" parent="GameOverlay/MarginContainer/GridContainer/HBoxContainer2"]
+margin_left = 20.0
+margin_right = 80.0
+margin_bottom = 16.0
+text = "999999"
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 240, 136 )

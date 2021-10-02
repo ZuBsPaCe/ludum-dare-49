@@ -9,6 +9,7 @@ onready var _center := $Center
 
 
 var _target_velocity := Vector2.ZERO
+var _current_coord := Coord.new()
 
 var _shoot_cooldown := Cooldown.new()
 
@@ -18,7 +19,6 @@ func _ready():
 	
 func setup(pos:Vector2):
 	position = pos
-
 
 func _process(_delta):
 	_target_velocity = Vector2.ZERO
@@ -70,6 +70,9 @@ func _physics_process(_delta):
 	
 		# warning-ignore:return_value_discarded
 		move_and_slide(_target_velocity)
+		
+		if _current_coord.set_vector_if_changed(position):
+			Globals.try_pickup_orb(_current_coord)
 		
 		
 
