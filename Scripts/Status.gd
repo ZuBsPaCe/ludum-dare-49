@@ -29,9 +29,11 @@ var current_weapon_index:int
 
 var max_rounds_blaster:int
 var max_rounds_machinegun:int
+var max_rounds_shotgun:int
 
 var max_reload_cooldown_blaster:float
 var max_reload_cooldown_machinegun:float
+var max_reload_cooldown_shotgun:float
 
 
 var items := []
@@ -91,9 +93,11 @@ func start_game():
 	
 	max_rounds_blaster = 5
 	max_rounds_machinegun = 20
+	max_rounds_shotgun = 8
 	
 	max_reload_cooldown_blaster = 3.0
 	max_reload_cooldown_machinegun = 4.0
+	max_reload_cooldown_shotgun = 5.0
 	
 	weapons.append(WeaponType.BLASTER)
 	weapon_mags.append(0)
@@ -202,6 +206,20 @@ func add_item(item):
 		fire_cooldowns.append(fire_cooldown)
 		var reload_cooldown = Cooldown.new()
 		reload_cooldown.setup(self, max_reload_cooldown_machinegun, true)
+		reload_cooldowns.append(reload_cooldown)
+		
+		if ItemType.PLAYER_RELOAD in reload_cooldowns:
+			reload_cooldown.secs *= 0.5
+			
+	if item == ItemType.SHOTGUN:
+		weapons.append(WeaponType.SHOTGUN)
+		weapon_mags.append(3)
+		weapon_rounds.append(max_rounds_shotgun)
+		var fire_cooldown = Cooldown.new()
+		fire_cooldown.setup(self, 1.0, true)
+		fire_cooldowns.append(fire_cooldown)
+		var reload_cooldown = Cooldown.new()
+		reload_cooldown.setup(self, max_reload_cooldown_shotgun, true)
 		reload_cooldowns.append(reload_cooldown)
 		
 		if ItemType.PLAYER_RELOAD in reload_cooldowns:

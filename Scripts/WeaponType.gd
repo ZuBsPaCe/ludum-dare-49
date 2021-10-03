@@ -1,4 +1,5 @@
 enum WeaponType {
 	BLASTER,
-	MACHINEGUN
+	MACHINEGUN,
+	SHOTGUN
 }

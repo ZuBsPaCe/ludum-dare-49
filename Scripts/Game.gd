@@ -354,7 +354,8 @@ func update_shop():
 		ItemType.HEALTH,
 		ItemType.PLAYER_SPEED,
 		ItemType.PLAYER_RELOAD,
-		ItemType.MACHINEGUN
+		ItemType.MACHINEGUN,
+		ItemType.SHOTGUN
 		]
 		
 	var available_money := [
@@ -431,6 +432,10 @@ func update_shop():
 			ItemType.MACHINEGUN:
 				buy_coins.append(500)
 				button.text = "Machinegun"
+				
+			ItemType.SHOTGUN:
+				buy_coins.append(600)
+				button.text = "Shotgun"
 				
 			_:
 				assert(false)

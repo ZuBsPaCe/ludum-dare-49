@@ -5,6 +5,7 @@ const Direction := preload("res://Scripts/Tools/Direction.gd").Direction
 const GameState := preload("res://Scripts/GameState.gd").GameState
 const ItemType := preload("res://Scripts/ItemType.gd").ItemType
 const SoundType := preload("res://Scripts/SoundType.gd").SoundType
+const WeaponType := preload("res://Scripts/WeaponType.gd").SoundType
 
 
 
@@ -96,7 +97,18 @@ func _process(_delta):
 		if Status.try_fire():
 			Globals.play_sound(SoundType.PLAYER_FIRE)
 			Globals.shake(weapon_dir)
-			Globals.create_bullet(weapon.global_position, weapon_dir, true)
+			
+			if Status.weapons[Status.current_weapon_index] == WeaponType.SHOTGUN:
+				var dir := weapon_dir
+				
+				for i in 5:
+					dir = weapon_dir
+					dir = dir.rotated(5.0 - randf() * 10.0)
+					
+					Globals.create_bullet(weapon.global_position, dir, true)
+				
+			else:
+				Globals.create_bullet(weapon.global_position, weapon_dir, true)
 
 func _input(_event):
 	if Input.is_action_pressed("next_weapon"):
