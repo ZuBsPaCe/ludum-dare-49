@@ -5,7 +5,7 @@ const Direction := preload("res://Scripts/Tools/Direction.gd").Direction
 const GameState := preload("res://Scripts/GameState.gd").GameState
 const ItemType := preload("res://Scripts/ItemType.gd").ItemType
 const SoundType := preload("res://Scripts/SoundType.gd").SoundType
-const WeaponType := preload("res://Scripts/WeaponType.gd").SoundType
+const WeaponType := preload("res://Scripts/WeaponType.gd").WeaponType
 
 
 
