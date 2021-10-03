@@ -13,9 +13,14 @@ const bullet_player_mask := (1 << (1-1)) | (1 << (3-1))
 const bullet_monster_layer := (1 << (5-1))
 const bullet_monster_mask := (1 << (1-1)) | (1 << (2-1))
 
+signal transition_showing
+
 var _enity_container
 var _drop_container
 var _dead_container
+
+var _transition_sprite:Sprite
+var _transition_tween:Tween
 
 var _player_scene:PackedScene
 var _bullet_scene:PackedScene
@@ -45,6 +50,8 @@ func setup(
 	p_entity_container,
 	p_drop_container,
 	p_dead_container,
+	p_transition_sprite:Sprite,
+	p_transition_tween:Tween,
 	p_player_scene: PackedScene,
 	p_bullet_scene: PackedScene,
 	p_orb_scene: PackedScene,
@@ -57,6 +64,8 @@ func setup(
 	_enity_container = p_entity_container
 	_drop_container = p_drop_container
 	_dead_container = p_dead_container
+	_transition_sprite = p_transition_sprite
+	_transition_tween = p_transition_tween
 	_player_scene = p_player_scene
 
 	_bullet_scene = p_bullet_scene
@@ -249,3 +258,41 @@ func try_pickup_orb(coord: Coord):
 func get_global_mouse_position() -> Vector2:
 	return _center_node.get_global_mouse_position()
 	
+	
+func start_transition():
+	_transition_tween.stop(_transition_sprite)
+	
+	var old_clear_mode = get_viewport().get_clear_mode()
+	get_viewport().set_clear_mode(Viewport.CLEAR_MODE_ONLY_NEXT_FRAME)
+
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+
+	var img = get_viewport().get_texture().get_data()
+
+	get_viewport().set_clear_mode(old_clear_mode)
+   
+	img.flip_y()
+
+
+	var tex = ImageTexture.new()
+	tex.create_from_image(img)
+
+	_transition_sprite.visible = true
+	_transition_sprite.texture = tex
+	
+	emit_signal("transition_showing")
+	
+	yield(get_tree().create_timer(0.2), "timeout")
+	
+	_transition_tween.interpolate_property(
+		_transition_sprite,
+		"position",
+		_transition_sprite.position,
+		_transition_sprite.position + Vector2.UP * 500,
+		0.75,
+		Tween.TRANS_BACK, 
+		Tween.EASE_IN)
+		
+	# warning-ignore:return_value_discarded
+	_transition_tween.start()

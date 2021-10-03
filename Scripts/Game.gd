@@ -34,6 +34,8 @@ func _ready():
 		$EntityContainer,
 		$DropContainer,
 		$DeadContainer,
+		$TransitionLayer/TransitionSprite,
+		$TransitionLayer/TransitionSprite/TransitionTween,
 		player_scene,
 		bullet_scene,
 		orb_scene,
@@ -98,10 +100,12 @@ func start_main_menu():
 	
 
 func start_game():
-	main_menu_root.visible = true	
 	
+	Globals.start_transition()
+	yield(Globals, "transition_showing")
+	
+	main_menu_root.visible = false
 	Status.start_game()
-	
 	switch_game_state(GameState.LEVEL)
 
 
@@ -132,3 +136,7 @@ func start_level():
 		Globals.create_monster(spawn_coord.to_center_pos(), monster_type)
 	
 	
+
+
+func _on_StartButton_pressed():
+	switch_game_state(GameState.NEW_GAME)

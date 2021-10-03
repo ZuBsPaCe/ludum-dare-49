@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://Scripts/Game.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/Tools/CameraShake.gd" type="Script" id=2]
@@ -8,7 +8,6 @@
 [ext_resource path="res://Sprites/Floor/Floor.png" type="Texture" id=6]
 [ext_resource path="res://Prefabs/Bullet.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Prefabs/Ghost.tscn" type="PackedScene" id=8]
-[ext_resource path="res://Art/Test-480-270.png" type="Texture" id=9]
 [ext_resource path="res://Sprites/Heart/Heart-Full.png" type="Texture" id=10]
 [ext_resource path="res://Prefabs/Orb.tscn" type="PackedScene" id=11]
 [ext_resource path="res://Sprites/Coin/Coin.png" type="Texture" id=12]
@@ -288,6 +287,15 @@ margin_right = 80.0
 margin_bottom = 16.0
 text = "999999"
 
+[node name="TransitionLayer" type="CanvasLayer" parent="."]
+
+[node name="TransitionSprite" type="Sprite" parent="TransitionLayer"]
+visible = false
+position = Vector2( 240, 136 )
+z_index = 100
+
+[node name="TransitionTween" type="Tween" parent="TransitionLayer/TransitionSprite"]
+
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 240, 136 )
 current = true
@@ -312,7 +320,4 @@ format = 1
 
 [node name="EntityContainer" type="YSort" parent="."]
 
-[node name="Sprite" type="Sprite" parent="."]
-visible = false
-position = Vector2( 240, 136 )
-texture = ExtResource( 9 )
+[connection signal="pressed" from="MainMenu/MainMenuRoot/MarginContainer/HBoxContainer/VBoxContainer/StartButton" to="." method="_on_StartButton_pressed"]
