@@ -26,6 +26,9 @@ var _target_velocity := Vector2.ZERO
 var _health:int
 var _speed:float
 
+var _shoot_animation:bool
+var _is_shooting:bool
+
 var _shoot_cooldown:Cooldown
 
 
@@ -38,12 +41,20 @@ func setup(pos:Vector2, p_monsterType, p_health, p_speed):
 	_health = p_health
 	_speed = p_speed
 	
+	_shoot_cooldown = null
+	_shoot_animation = false
+	_is_shooting = false
+	
 	match monster_type:
 		MonsterType.GHOST:
 			pass
 		MonsterType.JELLY:
 			_shoot_cooldown = Cooldown.new()
 			_shoot_cooldown.setup(self, 1.0, true)
+		MonsterType.SPIKE:
+			_shoot_cooldown = Cooldown.new()
+			_shoot_cooldown.setup(self, 6.0, true)
+			_shoot_animation = true
 	
 
 	yield(self, "ready")
@@ -63,6 +74,13 @@ func setup(pos:Vector2, p_monsterType, p_health, p_speed):
 	
 
 func _physics_process(_delta):
+
+	if _is_shooting:
+		if animation_player.is_playing():
+			return
+		_is_shooting = false
+		animation_player.play("WalkLeft")
+
 	if !_update_target_pos:
 		match _dir:
 			Direction.N:
@@ -107,8 +125,14 @@ func _physics_process(_delta):
 	if _shoot_cooldown != null && _shoot_cooldown.done:
 		_shoot_cooldown.restart()
 		if Tools.raycast_to(self, Globals.player, Globals.wall_player_mask, 16.0 * 16.0):
-			var dir:Vector2 = (Globals.player.position - self.position).normalized()
-			Globals.create_bullet(position + dir * 6.0, dir,  false)
+			if !_shoot_animation:
+				var dir:Vector2 = (Globals.player.position - self.position).normalized()
+				Globals.create_bullet(position + dir * 6.0, dir,  false)
+			else:
+				_is_shooting = true
+				animation_player.stop()
+				animation_player.play("ShootLeft")
+
 
 func _try_set_target_pos(current_pos:Coord, dir) -> bool:
 	var next_pos := Tools.step_dir(current_pos, dir)
@@ -171,3 +195,11 @@ func hurt():
 	tween.queue_free()
 
 	glow_sprite.visible = false
+
+
+func fire_spike():
+	for i in 6:
+		var angle := randf() * 2.0 * PI
+		var dir := Vector2.UP.rotated(angle)
+		
+		Globals.create_bullet(position, dir, false)

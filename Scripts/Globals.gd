@@ -23,6 +23,7 @@ var _orb_scene:PackedScene
 
 var _ghost_scene:PackedScene
 var _jelly_scene:PackedScene
+var _spike_scene:PackedScene
 
 var camera:Camera2D
 var player:KinematicBody2D
@@ -47,7 +48,8 @@ func setup(
 	p_bullet_scene: PackedScene,
 	p_orb_scene: PackedScene,
 	p_ghost_scene: PackedScene,
-	p_jelly_scene: PackedScene):
+	p_jelly_scene: PackedScene,
+	p_spike_scene: PackedScene):
 
 	camera = p_camera
 	_enity_container = p_entity_container
@@ -60,6 +62,7 @@ func setup(
 	
 	_ghost_scene = p_ghost_scene
 	_jelly_scene = p_jelly_scene
+	_spike_scene = p_spike_scene
 
 func create_player(pos: Vector2) -> void:
 	assert(player == null)
@@ -109,6 +112,10 @@ func create_monster(pos: Vector2, monster_type) -> void:
 			scene = _jelly_scene
 			speed = 32.0
 			health = 3
+		MonsterType.SPIKE:
+			scene = _spike_scene
+			speed = 16.0
+			health = 5
 		_:
 			assert(false)
 	

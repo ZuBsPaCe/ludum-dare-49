@@ -129,6 +129,18 @@ tracks/9/keys = {
 "update": 1,
 "values": [ 0, 1 ]
 }
+tracks/10/type = "value"
+tracks/10/path = NodePath("Sprites/Glow:flip_h")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
 
 [sub_resource type="Animation" id=3]
 resource_name = "WalkRight"
@@ -241,6 +253,30 @@ tracks/8/keys = {
 "update": 0,
 "values": [ Vector2( 0, -8.5 ) ]
 }
+tracks/9/type = "value"
+tracks/9/path = NodePath("Sprites/Glow:flip_h")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/10/type = "value"
+tracks/10/path = NodePath("Sprites/Glow:frame")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 0, 1 ]
+}
 
 [node name="Jelly" type="KinematicBody2D" groups=[
 "Monster",
@@ -259,22 +295,20 @@ hframes = 2
 vframes = 6
 
 [node name="Fill" type="Sprite" parent="Sprites"]
+visible = false
 texture = ExtResource( 1 )
-flip_h = true
 hframes = 2
 vframes = 6
 frame = 2
 
 [node name="Outline" type="Sprite" parent="Sprites"]
 texture = ExtResource( 1 )
-flip_h = true
 hframes = 2
 vframes = 6
 frame = 4
 
 [node name="Eyes" type="Sprite" parent="Sprites"]
 texture = ExtResource( 1 )
-flip_h = true
 hframes = 2
 vframes = 6
 frame = 6
@@ -282,7 +316,6 @@ frame = 6
 [node name="EyesRed" type="Sprite" parent="Sprites"]
 visible = false
 texture = ExtResource( 1 )
-flip_h = true
 hframes = 2
 vframes = 6
 frame = 8
