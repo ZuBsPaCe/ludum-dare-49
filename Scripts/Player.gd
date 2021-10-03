@@ -3,8 +3,9 @@ extends KinematicBody2D
 
 const Direction := preload("res://Scripts/Tools/Direction.gd").Direction
 const GameState := preload("res://Scripts/GameState.gd").GameState
+const ItemType := preload("res://Scripts/ItemType.gd").ItemType
 
-export var speed := 64.0
+
 
 onready var _weapon_right := $WeaponRight
 onready var _weapon_left := $WeaponLeft
@@ -29,6 +30,7 @@ var _animation_dir = Direction.W
 var _target_velocity := Vector2.ZERO
 var _current_coord := Coord.new()
 
+var speed := 64.0
 
 
 func _ready():
@@ -42,6 +44,12 @@ func _ready():
 	
 func setup(pos:Vector2):
 	position = pos
+	
+	if ItemType.PLAYER_SPEED in Status.items:
+		speed *= 1.5
+	
+	if ItemType.SLOW_PLAYER in Status.items:
+		speed *= 0.75
 
 
 func _process(_delta):

@@ -4,6 +4,7 @@ extends KinematicBody2D
 const Direction := preload("res://Scripts/Tools/Direction.gd").Direction
 const TileType := preload("res://Scripts/TileType.gd").TileType
 const MonsterType := preload("res://Scripts/MonsterType.gd").MonsterType
+const ItemType := preload("res://Scripts/ItemType.gd").ItemType
 
 onready var sprites:Node2D = $Sprites
 onready var glow_sprite:Sprite = $Sprites/Glow
@@ -72,6 +73,13 @@ func setup(pos:Vector2, p_monsterType, p_health, p_speed):
 			_shoot_animation = true
 			_turn_sprites = true
 	
+	
+	if ItemType.FAST_MONSTER in Status.items:
+		if monster_type != MonsterType.GHOST:
+			_speed += 16.0
+			
+	if ItemType.STRONG_MONSTER in Status.items:
+		_health += 5
 	
 	_check_cooldown = Cooldown.new()
 	_check_cooldown.setup(self, 1.0, true)

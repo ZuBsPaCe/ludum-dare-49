@@ -308,6 +308,7 @@ margin_bottom = 16.0
 text = "999999"
 
 [node name="DeathScreen" type="MarginContainer" parent="GameOverlay"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 13 )
@@ -390,7 +391,6 @@ anims/Blink = SubResource( 4 )
 
 [node name="SuccessScreen" type="Control" parent="GameOverlay"]
 pause_mode = 2
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 13 )
@@ -428,50 +428,90 @@ __meta__ = {
 margin_left = 50.0
 margin_top = 120.0
 margin_right = 430.0
-margin_bottom = 250.0
+margin_bottom = 270.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer"]
 margin_right = 380.0
-margin_bottom = 22.0
+margin_bottom = 120.0
 
 [node name="BuyLeft" type="VBoxContainer" parent="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer"]
 margin_right = 150.0
-margin_bottom = 22.0
+margin_bottom = 120.0
 rect_min_size = Vector2( 150, 0 )
 size_flags_horizontal = 4
 
-[node name="BuyButton" type="Button" parent="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer/BuyLeft"]
+[node name="Label" type="Label" parent="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer/BuyLeft"]
 margin_right = 150.0
-margin_bottom = 22.0
+margin_bottom = 16.0
+text = "Buy something"
+align = 1
+
+[node name="BuyButton1" type="Button" parent="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer/BuyLeft"]
+margin_top = 20.0
+margin_right = 150.0
+margin_bottom = 42.0
+text = "Ammo 3c"
+
+[node name="BuyButton2" type="Button" parent="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer/BuyLeft"]
+margin_top = 46.0
+margin_right = 150.0
+margin_bottom = 68.0
+text = "Ammo 3c"
+
+[node name="BuyButton3" type="Button" parent="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer/BuyLeft"]
+margin_top = 72.0
+margin_right = 150.0
+margin_bottom = 94.0
+text = "Ammo 3c"
+
+[node name="BuyButton4" type="Button" parent="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer/BuyLeft"]
+margin_top = 98.0
+margin_right = 150.0
+margin_bottom = 120.0
+text = "Ammo 3c"
 
 [node name="Control" type="Control" parent="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer"]
 margin_left = 154.0
 margin_right = 226.0
-margin_bottom = 22.0
+margin_bottom = 120.0
 size_flags_horizontal = 3
 
 [node name="BuyRight" type="VBoxContainer" parent="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer"]
 margin_left = 230.0
 margin_right = 380.0
-margin_bottom = 22.0
+margin_bottom = 120.0
 rect_min_size = Vector2( 150, 0 )
 size_flags_horizontal = 4
 
-[node name="BuyButton" type="Button" parent="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer/BuyRight"]
+[node name="Label" type="Label" parent="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer/BuyRight"]
 margin_right = 150.0
-margin_bottom = 22.0
+margin_bottom = 16.0
+text = "Give me money"
+align = 1
+
+[node name="MoneyButton1" type="Button" parent="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer/BuyRight"]
+margin_top = 20.0
+margin_right = 150.0
+margin_bottom = 42.0
+text = "Curse 3c"
+
+[node name="MoneyButton2" type="Button" parent="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer/BuyRight"]
+margin_top = 46.0
+margin_right = 150.0
+margin_bottom = 68.0
+text = "Curse 3c"
 
 [node name="Control" type="Control" parent="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer"]
-margin_top = 26.0
+margin_top = 124.0
 margin_right = 380.0
-margin_bottom = 104.0
+margin_bottom = 124.0
 size_flags_vertical = 3
 
 [node name="ContinueButton" type="Button" parent="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer"]
 margin_left = 147.0
-margin_top = 108.0
+margin_top = 128.0
 margin_right = 232.0
-margin_bottom = 130.0
+margin_bottom = 150.0
 size_flags_horizontal = 4
 text = "Continue"
 
@@ -510,4 +550,10 @@ format = 1
 
 [connection signal="pressed" from="MainMenu/MainMenuRoot/MarginContainer/HBoxContainer/VBoxContainer/StartButton" to="." method="_on_StartButton_pressed"]
 [connection signal="pressed" from="MainMenu/MainMenuRoot/MarginContainer/HBoxContainer/VBoxContainer/ExitButton" to="." method="_on_ExitButton_pressed"]
+[connection signal="pressed" from="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer/BuyLeft/BuyButton1" to="." method="_on_BuyButton1_pressed"]
+[connection signal="pressed" from="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer/BuyLeft/BuyButton2" to="." method="_on_BuyButton2_pressed"]
+[connection signal="pressed" from="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer/BuyLeft/BuyButton3" to="." method="_on_BuyButton3_pressed"]
+[connection signal="pressed" from="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer/BuyLeft/BuyButton4" to="." method="_on_BuyButton4_pressed"]
+[connection signal="pressed" from="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer/BuyRight/MoneyButton1" to="." method="_on_MoneyButton1_pressed"]
+[connection signal="pressed" from="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer/BuyRight/MoneyButton2" to="." method="_on_MoneyButton2_pressed"]
 [connection signal="pressed" from="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/ContinueButton" to="." method="_on_ContinueButton_pressed"]

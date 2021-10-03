@@ -4,6 +4,8 @@ const MonsterType := preload("res://Scripts/MonsterType.gd").MonsterType
 const GameState := preload("res://Scripts/GameState.gd").GameState
 const TileType := preload("res://Scripts/TileType.gd").TileType
 
+const ItemType := preload("res://Scripts/ItemType.gd").ItemType
+
 
 
 
@@ -19,6 +21,13 @@ export var tank_scene:PackedScene
 
 onready var main_menu_root := $MainMenu/MainMenuRoot
 onready var game_overlay_root := $GameOverlay/MarginContainer
+onready var buy_button1 := $GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer/BuyLeft/BuyButton1
+onready var buy_button2 := $GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer/BuyLeft/BuyButton2
+onready var buy_button3 := $GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer/BuyLeft/BuyButton3
+onready var buy_button4 := $GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer/BuyLeft/BuyButton4
+	
+onready var money_button1 := $GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer/BuyRight/MoneyButton1
+onready var money_button2 := $GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer/BuyRight/MoneyButton2
 
 
 var state:int = GameState.NONE
@@ -135,7 +144,8 @@ func switch_game_state(new_state) -> void:
 			main_menu_root.visible = false
 			
 		GameState.LEVEL:
-			game_overlay_root.visible = false
+			#game_overlay_root.visible = false
+			pass
 
 		GameState.NEW_GAME:
 			pass
@@ -172,6 +182,7 @@ func switch_game_state(new_state) -> void:
 	
 	match new_state:
 		GameState.MAIN_MENU:
+			game_overlay_root.visible = false
 			main_menu_root.visible = true
 
 		GameState.NEW_GAME:
@@ -184,6 +195,7 @@ func switch_game_state(new_state) -> void:
 			
 		GameState.LEVEL_SUCCESS:
 			get_tree().paused = true
+			update_shop()
 			$GameOverlay/SuccessScreen.visible = true
 			
 			
@@ -243,6 +255,9 @@ func start_level():
 		spawn_monster()
 
 
+
+
+
 func spawn_monster():
 	var monster_types := []
 	
@@ -287,3 +302,188 @@ func _on_ExitButton_pressed():
 
 func _on_ContinueButton_pressed():
 	switch_game_state(GameState.NEXT_LEVEL)
+	
+	
+	
+
+var buy_options := []
+var money_options := []
+
+var buy_coins := []
+var money_coins := []
+
+func update_shop():
+	
+	var available_buy := [
+		ItemType.AMMO,
+		ItemType.HEALTH,
+		ItemType.PLAYER_SPEED,
+		ItemType.PLAYER_RELOAD,
+		ItemType.MACHINEGUN
+		]
+		
+	var available_money := [
+		ItemType.SLOW_PLAYER,
+		ItemType.FAST_MONSTER,
+		ItemType.STRONG_MONSTER
+	]
+	
+	buy_options.clear()
+	money_options.clear()
+	
+	buy_coins.clear()
+	money_coins.clear()
+
+	
+	while available_buy.size() > 0 && buy_options.size() < 4:
+		var rnd := randi() % available_buy.size()
+		var option = available_buy[rnd]
+		
+		available_buy.remove(rnd)
+		
+		if option in Status.items:
+			continue
+			
+		if option == ItemType.HEALTH && Status.health >= 3:
+			continue
+		
+		buy_options.append(option)
+		
+		
+		
+	while available_money.size() > 0 && money_options.size() < 2:
+		var rnd := randi() % available_money.size()
+		var option = available_money[rnd]
+		
+		available_money.remove(rnd)
+		
+		if option in Status.items:
+			continue
+			
+		money_options.append(option)
+
+	var index := -1
+	for option in buy_options:
+		index += 1
+		
+		var button:Button
+		if index == 0:
+			button = buy_button1
+		elif index == 1:
+			button = buy_button2
+		elif index == 2:
+			button = buy_button3
+		else:
+			button = buy_button4
+		
+		match option:
+			ItemType.AMMO:
+				buy_coins.append(150)
+				button.text = "Ammo"
+				
+			ItemType.HEALTH:
+				buy_coins.append(300)
+				button.text = "Health"
+				
+			ItemType.PLAYER_SPEED:
+				buy_coins.append(400)
+				button.text = "Speed"
+				
+			ItemType.PLAYER_RELOAD:
+				buy_coins.append(400)
+				button.text = "Fast reload"
+				
+			ItemType.MACHINEGUN:
+				buy_coins.append(500)
+				button.text = "Machinegun"
+				
+			_:
+				assert(false)
+		
+		
+		button.text += "  " + str(buy_coins.back())
+		#print(button.text)
+	
+	index = -1
+	for option in money_options:
+		index += 1
+		
+		var button:Button
+		if index == 0:
+			button = money_button1
+		else:
+			button = money_button2
+		
+		match option:
+			ItemType.SLOW_PLAYER:
+				money_coins.append(200)
+				button.text = "Tired"
+				
+			ItemType.FAST_MONSTER:
+				money_coins.append(250)
+				button.text = "Fast monster"
+				
+			ItemType.STRONG_MONSTER:
+				money_coins.append(250)
+				button.text = "Strong monster"
+				
+			
+				
+			_:
+				assert(false)
+				
+		button.text += "  " + str(money_coins.back())
+	
+	
+	buy_button1.visible = buy_options.size() >= 1
+	buy_button2.visible = buy_options.size() >= 2
+	buy_button3.visible = buy_options.size() >= 3 
+	buy_button4.visible = buy_options.size() >= 4 
+	
+	money_button1.visible = money_options.size() >= 1
+	money_button2.visible = money_options.size() >= 2
+	
+
+
+
+func _on_BuyButton1_pressed():
+	if shopping(buy_options[0], -buy_coins[0]):
+		buy_button1.visible = false
+
+
+
+func _on_BuyButton2_pressed():
+	if shopping(buy_options[1], -buy_coins[1]):
+		buy_button2.visible = false
+
+
+func _on_BuyButton3_pressed():
+	if shopping(buy_options[2], -buy_coins[2]):
+		buy_button3.visible = false
+
+
+func _on_BuyButton4_pressed():
+	if shopping(buy_options[3], -buy_coins[3]):
+		buy_button4.visible = false
+
+
+func shopping(option, coins) -> bool:
+	if !Status.change_coins(coins):
+		return false
+	
+	Status.add_item(option)
+	return true
+	
+
+
+
+func _on_MoneyButton1_pressed():
+	shopping(money_options[0], money_coins[0])
+	money_button1.visible = false
+
+
+func _on_MoneyButton2_pressed():
+	shopping(money_options[1], money_coins[1])
+	money_button2.visible = false
+
+

@@ -5,7 +5,7 @@ const _empty_heart_tex := preload("res://Sprites/Heart/Heart-Empty.png")
 
 const WeaponType := preload("res://Scripts/WeaponType.gd").WeaponType
 const GameState := preload("res://Scripts/GameState.gd").GameState
-
+const ItemType := preload("res://Scripts/ItemType.gd").ItemType
 
 
 var level:int
@@ -31,6 +31,11 @@ var max_rounds_machinegun:int
 
 var max_reload_cooldown_blaster:float
 var max_reload_cooldown_machinegun:float
+
+
+var items := []
+
+
 
 var _tex_heart1:TextureRect
 var _tex_heart2:TextureRect
@@ -81,6 +86,8 @@ func start_game():
 	total_coins = 0
 	current_weapon_index = 0
 	
+	items.clear()
+	
 	max_rounds_blaster = 5
 	max_rounds_machinegun = 20
 	
@@ -97,15 +104,15 @@ func start_game():
 	reload_cooldown.setup(self, max_reload_cooldown_blaster, true)
 	reload_cooldowns.append(reload_cooldown)
 	
-	weapons.append(WeaponType.MACHINEGUN)
-	weapon_mags.append(3)
-	weapon_rounds.append(max_rounds_machinegun)
-	fire_cooldown = Cooldown.new()
-	fire_cooldown.setup(self, 0.1, true)
-	fire_cooldowns.append(fire_cooldown)
-	reload_cooldown = Cooldown.new()
-	reload_cooldown.setup(self, max_reload_cooldown_machinegun, true)
-	reload_cooldowns.append(reload_cooldown)
+#	weapons.append(WeaponType.MACHINEGUN)
+#	weapon_mags.append(3)
+#	weapon_rounds.append(max_rounds_machinegun)
+#	fire_cooldown = Cooldown.new()
+#	fire_cooldown.setup(self, 0.1, true)
+#	fire_cooldowns.append(fire_cooldown)
+#	reload_cooldown = Cooldown.new()
+#	reload_cooldown.setup(self, max_reload_cooldown_machinegun, true)
+#	reload_cooldowns.append(reload_cooldown)
 	
 	_update_health_tex()
 	_update_coin_label()
@@ -138,10 +145,58 @@ func add_coin():
 	
 	_update_coin_label()
 	
-	if coins_to_pickup <= 0: # || coins > level * 10:
-		
+	if coins_to_pickup <= 0 || true: # || coins > level * 10:
+		coins += 200
 		Globals.switch_game_state(GameState.LEVEL_SUCCESS)
+
+func change_coins(change:int) -> bool:
+	if change < 0 && abs(change) > coins:
+		return false
+		
+	coins += change
+	_update_coin_label()
+	return true
 	
+func add_health():
+	health += 1
+	_update_health_tex()
+	
+func add_ammo():
+	
+	for i in range(weapon_mags.size()):
+		weapon_mags[i] += 3
+	
+	_update_rounds(false, true)
+	
+	
+func add_item(item):
+
+	if item == ItemType.HEALTH:
+		Status.add_health()
+	elif item == ItemType.AMMO:
+		Status.add_ammo()
+	else:
+		items.append(item)
+	
+	if item == ItemType.PLAYER_RELOAD:
+		for cooldown in reload_cooldowns:
+			cooldown.secs *= 0.5
+			
+	
+	if item == ItemType.MACHINEGUN:
+		weapons.append(WeaponType.MACHINEGUN)
+		weapon_mags.append(3)
+		weapon_rounds.append(max_rounds_machinegun)
+		var fire_cooldown = Cooldown.new()
+		fire_cooldown.setup(self, 0.1, true)
+		fire_cooldowns.append(fire_cooldown)
+		var reload_cooldown = Cooldown.new()
+		reload_cooldown.setup(self, max_reload_cooldown_machinegun, true)
+		reload_cooldowns.append(reload_cooldown)
+		
+		if ItemType.PLAYER_RELOAD in reload_cooldowns:
+			reload_cooldown.secs *= 0.5
+
 
 func try_fire() -> bool:
 	var rounds:int = weapon_rounds[current_weapon_index]
