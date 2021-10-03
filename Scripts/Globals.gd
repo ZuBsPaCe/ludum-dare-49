@@ -130,7 +130,7 @@ func create_monster(pos: Vector2, monster_type) -> void:
 	match monster_type:
 		MonsterType.GHOST:
 			scene = _ghost_scene
-			speed = 64.0
+			speed = 48.0
 			health = 3
 		MonsterType.JELLY:
 			scene = _jelly_scene

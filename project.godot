@@ -38,7 +38,7 @@ _global_script_class_icons={
 
 [application]
 
-config/name="Godot-base-code"
+config/name="The walls are tumbling down!"
 run/main_scene="res://Scenes/Game.tscn"
 boot_splash/image="res://Sprites/BootSplash/zubspace_banner.png"
 boot_splash/fullsize=false

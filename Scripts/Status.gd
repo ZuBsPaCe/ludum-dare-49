@@ -379,6 +379,8 @@ func get_current_max_weapon_rounds() -> int:
 			return max_rounds_blaster
 		WeaponType.MACHINEGUN:
 			return max_rounds_machinegun
+		WeaponType.SHOTGUN:
+			return max_rounds_shotgun
 		_:
 			assert(false)
 			return 0
