@@ -4,6 +4,15 @@ const TileType := preload("res://Scripts/TileType.gd").TileType
 const Direction := preload("res://Scripts/Tools/Direction.gd").Direction
 const MonsterType := preload("res://Scripts/MonsterType.gd").MonsterType
 
+const wall_player_mask := (1 << (1-1)) | (1 << (2-1))
+const wall_monster_mask := (1 << (1-1)) | (1 << (3-1))
+
+const bullet_player_layer := (1 << (4-1))
+const bullet_player_mask := (1 << (1-1)) | (1 << (3-1))
+
+const bullet_monster_layer := (1 << (5-1))
+const bullet_monster_mask := (1 << (1-1)) | (1 << (2-1))
+
 var _enity_container
 var _drop_container
 var _dead_container
@@ -27,6 +36,7 @@ var _center_node: Node2D;
 func _ready():
 	_center_node = Node2D.new()
 	add_child(_center_node)
+	
 
 func setup(
 	p_camera: Camera2D,
@@ -62,9 +72,22 @@ func destroy_player() -> void:
 	player.queue_free()
 	player = null
 
-func create_bullet(pos: Vector2, dir: Vector2) -> void:
+func create_bullet(pos: Vector2, dir: Vector2, from_player: bool) -> void:
+	var layer:int
+	var mask:int
+	var speed:int
+	
+	if from_player:
+		layer = bullet_player_layer
+		mask = bullet_player_mask
+		speed = Status.player_bullet_speed
+	else:
+		layer = bullet_monster_layer
+		mask = bullet_monster_mask
+		speed = Status.monster_bullet_speed
+	
 	var bullet = _bullet_scene.instance()
-	bullet.setup(pos, dir)
+	bullet.setup(pos, dir, speed, from_player, layer, mask)
 	_enity_container.add_child(bullet)
 	
 func destroy_bullet(bullet):

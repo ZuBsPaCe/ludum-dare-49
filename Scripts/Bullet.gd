@@ -1,11 +1,12 @@
 extends RigidBody2D
 
-export var speed := 128.0
-
 
 var _dir := Vector2.ZERO
 var _start := false
-var _fade:bool
+var _fade: bool
+var _speed: float
+
+var _from_player:bool
 
 func _ready():
 	pass
@@ -14,16 +15,22 @@ func _physics_process(_delta):
 	if _start:
 		_start = false
 		modulate.a = 1.0
-		apply_central_impulse(_dir * speed)
+		apply_central_impulse(_dir * _speed)
 
 	elif !_fade:
 		var vel := linear_velocity.length()
-		if vel <= 128.0:
+		if vel <= _speed / 3.0:
 			_start_fade()
 
-func setup(p_pos:Vector2, p_dir:Vector2):
+func setup(p_pos:Vector2, p_dir:Vector2, p_speed:float, from_player:bool, p_layer:int, p_mask:int):
 	position = p_pos
 	_dir = p_dir
+	_speed = p_speed
+	
+	_from_player = from_player
+	
+	collision_layer = p_layer
+	collision_mask = p_mask
 
 	_start = true
 	_fade = false
@@ -36,12 +43,18 @@ func _on_Bullet_body_entered(body):
 	if body.is_in_group("Monster"):
 		body.hurt()
 		Globals.destroy_bullet(self)
+	elif body.is_in_group("Player"):
+		Status.hurt_player()
+		Globals.destroy_bullet(self)
 	else:
 		if body.is_in_group("Tilemap"):
 			Globals.hurt_tile(position)
 		
-		linear_damp = 3.0
-		_start_fade()
+		if _from_player:
+			linear_damp = 3.0
+			_start_fade()
+		else:
+			Globals.destroy_bullet(self)
 
 func _start_fade():
 	_fade = true

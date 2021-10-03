@@ -14,7 +14,7 @@ onready var collision_shape:CollisionShape2D = $Collision
 onready var animation_player:AnimationPlayer = $Animation
 
 
-var monsterType
+var monster_type
 
 var _dir = Direction.N
 var _current_coord:= Coord.new()
@@ -26,14 +26,25 @@ var _target_velocity := Vector2.ZERO
 var _health:int
 var _speed:float
 
+var _shoot_cooldown:Cooldown
+
+
 func _ready():
 	pass
 
 func setup(pos:Vector2, p_monsterType, p_health, p_speed):
 	position = pos
-	monsterType = p_monsterType
+	monster_type = p_monsterType
 	_health = p_health
 	_speed = p_speed
+	
+	match monster_type:
+		MonsterType.GHOST:
+			pass
+		MonsterType.JELLY:
+			_shoot_cooldown = Cooldown.new()
+			_shoot_cooldown.setup(self, 1.0, true)
+	
 
 	yield(self, "ready")
 	
@@ -92,6 +103,12 @@ func _physics_process(_delta):
 	
 	# warning-ignore:return_value_discarded
 	move_and_slide(_target_velocity)
+	
+	if _shoot_cooldown != null && _shoot_cooldown.done:
+		_shoot_cooldown.restart()
+		if Tools.raycast_to(self, Globals.player, Globals.wall_player_mask, 16.0 * 16.0):
+			var dir:Vector2 = (Globals.player.position - self.position).normalized()
+			Globals.create_bullet(position + dir * 6.0, dir,  false)
 
 func _try_set_target_pos(current_pos:Coord, dir) -> bool:
 	var next_pos := Tools.step_dir(current_pos, dir)

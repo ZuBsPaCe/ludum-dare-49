@@ -11,6 +11,9 @@ var level:int
 var health:int
 var coins:int
 
+var player_bullet_speed := 384.0
+var monster_bullet_speed := 64.0
+
 var weapons := []
 var weapon_mags := []
 var weapon_rounds := []

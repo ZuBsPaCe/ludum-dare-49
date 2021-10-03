@@ -109,14 +109,27 @@ func raycast_dir(from: PhysicsBody2D, dir: Vector2, view_distance: float) -> Obj
 	return _raycast.get_collider()
 
 
-func raycast_to(from: PhysicsBody2D, to: PhysicsBody2D, view_distance: float) -> bool:
+func raycast_to(from: PhysicsBody2D, to: PhysicsBody2D, collision_mask:int, view_distance: float) -> bool:
 #	raycast.clear_exceptions()
 #	raycast.add_exception(from)
 
 	_raycast.position = from.position
-	_raycast.cast_to = (from.position - to.position).clamped(view_distance)
-	_raycast.collision_mask = from.collision_mask
+	_raycast.cast_to = (to.position - from.position).clamped(view_distance)
+	_raycast.collision_mask = collision_mask
 
 	_raycast.force_raycast_update()
+	
+#	debug.append(_raycast.position)
+#	debug.append(_raycast.cast_to)
+#	z_index = 100
+#	update()
 
 	return _raycast.get_collider() == to
+
+#var debug := []
+#
+#func _draw():
+#	for i in range(0, debug.size(), 2):
+#		draw_line(debug[i], debug[i] + debug[i + 1], Color.red, 2)
+#
+#	debug.clear()

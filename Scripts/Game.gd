@@ -100,11 +100,15 @@ func start_level():
 	
 	Globals.map = map
 	
+	yield(get_tree(), "idle_frame")
+	
 	Globals.create_player(map.player_spawn_coord.to_center_pos())
 	
 	for _i in range(10):
 		var monster_types := [MonsterType.GHOST, MonsterType.JELLY]
 		var monster_type = Tools.rand_item(monster_types)
+		
+		monster_type = MonsterType.JELLY
 		
 		var spawn_coord:Coord = Tools.rand_item(map.monster_spawn_coords)
 		Globals.create_monster(spawn_coord.to_center_pos(), monster_type)

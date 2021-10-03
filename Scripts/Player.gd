@@ -58,7 +58,7 @@ func _process(_delta):
 	if Input.is_action_pressed("left_click"):
 		if Status.try_fire():
 			Globals.shake(weapon_dir)
-			Globals.create_bullet(weapon.global_position, weapon_dir)
+			Globals.create_bullet(weapon.global_position, weapon_dir, true)
 
 func _input(event):
 	if Input.is_action_pressed("next_weapon"):
