@@ -21,6 +21,10 @@ export var spike_scene:PackedScene
 export var tank_scene:PackedScene
 
 
+onready var main_menu_root := $MainMenu/MainMenuRoot
+onready var game_overlay_root := $GameOverlay/MarginContainer
+
+
 var state:int = GameState.NONE
 
 
@@ -52,7 +56,7 @@ func _ready():
 		$GameOverlay/MarginContainer/GridContainer/HBoxContainer3/RoundsContainer/RoundsRectFront,
 		$GameOverlay/MarginContainer/GridContainer/HBoxContainer3/RoundsContainer/RoundsRectBack)
 	
-	switch_game_state(GameState.NEW_GAME)
+	switch_game_state(GameState.MAIN_MENU)
 
 
 func switch_game_state(new_state) -> void:
@@ -76,7 +80,7 @@ func switch_game_state(new_state) -> void:
 	
 	match new_state:
 		GameState.MAIN_MENU:
-			pass
+			start_main_menu()
 
 		GameState.NEW_GAME:
 			start_game()
@@ -87,7 +91,15 @@ func switch_game_state(new_state) -> void:
 		_:
 			assert(false, "Unknown game state %s" % new_state)
 			
+			
+func start_main_menu():
+	main_menu_root.visible = true
+	game_overlay_root.visible = false
+	
+
 func start_game():
+	main_menu_root.visible = true	
+	
 	Status.start_game()
 	
 	switch_game_state(GameState.LEVEL)
@@ -96,6 +108,8 @@ func start_game():
 func start_level():
 	Status.start_level()
 	
+	
+	game_overlay_root.visible = true
 	
 	var map := Map.new(30, 17)
 	

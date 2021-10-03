@@ -9,11 +9,17 @@ onready var _weapon_right := $WeaponRight
 onready var _weapon_left := $WeaponLeft
 onready var _center := $Center
 
+onready var sprites := $Sprites
 onready var collision_shape := $CollisionShape2D
 onready var glow_sprite := $Sprites/Glow
-onready var auro_sprite := $Sprites/Aura
+onready var aura_sprite := $Sprites/Aura
 onready var eyes_sprite := $Sprites/Eyes
 onready var eyes_dead_sprite := $Sprites/EyesDead
+
+
+onready var _glow_tween := $GlowTween
+onready var _aura_tween := $AuraTween
+onready var _black_hole_tween := $BlackHoleTween
 
 
 onready var _animation_player := $AnimationPlayer
@@ -25,10 +31,12 @@ var _current_coord := Coord.new()
 
 
 func _ready():
-	auro_sprite.visible = true
+	aura_sprite.visible = true
 	glow_sprite.visible = false
 	eyes_sprite.visible = true
 	eyes_dead_sprite.visible = false
+	
+	$BlackHole.visible = false
 	
 	
 func setup(pos:Vector2):
@@ -116,16 +124,77 @@ func _on_HurtArea2D_body_entered(body):
 
 
 func hurt():
+	if Status.health == 0:
+		return
+		
+		
 	Status.hurt_player()
 	
+	_start_glow_tween()
+
+	if Status.health == 0:
+		
+		_start_black_hole_tween()
 	
-	glow_sprite.visible = true
+		yield(get_tree().create_timer(0.3), "timeout")
+		
+		_animation_player.stop()
+		
+		remove_child(collision_shape)
+		
+		sprites.position = Vector2.ZERO
+		
+		if randf() < 0.5:
+			sprites.global_rotation = deg2rad(-70.0 - randf() * 40.0)
+		else:
+			sprites.global_rotation = deg2rad(70.0 + randf() * 40.0)
+			
+		sprites.modulate.a = 0.6
+			
+		eyes_sprite.visible = false
+		eyes_dead_sprite.visible = true
+		
+		set_process(false)
+		set_physics_process(false)
+		#Globals.destroy_monster(self)
+		
 	
-	var tween := Tween.new()
-	add_child(tween)
+func _start_black_hole_tween():
+	$BlackHole.visible = true
 
 	# warning-ignore:return_value_discarded
-	tween.interpolate_property(
+	_black_hole_tween.interpolate_property(
+		$BlackHole,
+		"modulate",
+		Color(1, 0, 0, 0.0),
+		Color(1, 0, 0, 1.0),
+		0.3,
+		Tween.TRANS_CUBIC, 
+		Tween.EASE_OUT)
+		
+	_black_hole_tween.interpolate_property(
+		$BlackHole,
+		"scale",
+		Vector2(2.0, 2.0),
+		Vector2(1.0, 1.0),
+		0.3,
+		Tween.TRANS_CUBIC, 
+		Tween.EASE_OUT)
+		
+	# warning-ignore:return_value_discarded
+	_black_hole_tween.start()
+
+
+
+func _start_glow_tween():
+	glow_sprite.visible = true
+	aura_sprite.visible = false
+	
+	_glow_tween.stop(self)
+	_aura_tween.stop(self)
+	
+	# warning-ignore:return_value_discarded
+	_glow_tween.interpolate_property(
 		glow_sprite,
 		"modulate",
 		Color(1, 0, 0, 0.5),
@@ -135,38 +204,30 @@ func hurt():
 		Tween.EASE_IN_OUT)
 		
 	# warning-ignore:return_value_discarded
-	tween.start()
+	_glow_tween.start()
 	
-	auro_sprite.visible = false
-
-	yield(tween, "tween_completed")
-	tween.queue_free()
-
+	yield(_glow_tween, "tween_completed")
 	glow_sprite.visible = false
 	
-
 	if Status.health > 0:
-		
-			
-		var tween_aura := Tween.new()
-		add_child(tween_aura)
-		auro_sprite.modulate = Color(1, 1, 1, 0.0)
-		auro_sprite.visible = true
-		
-		# warning-ignore:return_value_discarded
-		tween_aura.interpolate_property(
-			auro_sprite,
-			"modulate",
-			Color(1, 1, 1, 0.0),
-			Color(1, 1, 1, 1.0),
-			2.0,
-			Tween.TRANS_LINEAR, 
-			Tween.EASE_IN_OUT)
+		_start_aura_tween()
+
+func _start_aura_tween():
 	
-		
-		# warning-ignore:return_value_discarded
-		tween_aura.start()
+	_aura_tween.stop(self)
+	
+	aura_sprite.modulate = Color(1, 1, 1, 0.0)
+	aura_sprite.visible = true
+	
+	# warning-ignore:return_value_discarded
+	_aura_tween.interpolate_property(
+		aura_sprite,
+		"modulate",
+		Color(1, 1, 1, 0.0),
+		Color(1, 1, 1, 1.0),
+		2.0,
+		Tween.TRANS_LINEAR, 
+		Tween.EASE_IN_OUT)
 
-		yield(tween_aura, "tween_completed")
-
-		tween_aura.queue_free()
+	# warning-ignore:return_value_discarded
+	_aura_tween.start()

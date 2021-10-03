@@ -122,6 +122,7 @@ func hurt_player():
 	_hurted_cooldown.restart()
 	
 	if health == 0:
+		Engine.time_scale = 0.1
 		return
 
 func add_coin():
