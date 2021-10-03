@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=2]
+[gd_scene load_steps=30 format=2]
 
 [ext_resource path="res://Scripts/Game.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/Tools/CameraShake.gd" type="Script" id=2]
@@ -23,6 +23,8 @@
 [ext_resource path="res://Art/Title.png" type="Texture" id=21]
 [ext_resource path="res://Scenes/MainMenu.gd" type="Script" id=22]
 [ext_resource path="res://Scripts/Sounds.gd" type="Script" id=23]
+[ext_resource path="res://Sprites/Monster/GhostTitle.png" type="Texture" id=24]
+[ext_resource path="res://Sprites/Player/PlayerTitle.png" type="Texture" id=25]
 
 [sub_resource type="Animation" id=4]
 resource_name = "Blink"
@@ -107,7 +109,6 @@ size = 960.0
 [node name="MainMenu" type="CanvasLayer" parent="."]
 
 [node name="MainMenuRoot" type="Control" parent="MainMenu"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 22 )
@@ -194,11 +195,44 @@ __meta__ = {
 
 [node name="Title" type="Sprite" parent="MainMenu/MainMenuRoot"]
 position = Vector2( 168, 192 )
+z_index = 4
 texture = ExtResource( 21 )
 
 [node name="TitleScaleTween" type="Tween" parent="MainMenu/MainMenuRoot/Title"]
 
 [node name="TitleRotationTween" type="Tween" parent="MainMenu/MainMenuRoot/Title"]
+
+[node name="TitleMonster1" type="Sprite" parent="MainMenu/MainMenuRoot"]
+position = Vector2( 104, 88 )
+scale = Vector2( 6, 6 )
+z_index = 2
+texture = ExtResource( 24 )
+
+[node name="TweenMonster1" type="Tween" parent="MainMenu/MainMenuRoot/TitleMonster1"]
+
+[node name="TitleMonster2" type="Sprite" parent="MainMenu/MainMenuRoot"]
+modulate = Color( 0.69, 0.69, 0.69, 1 )
+position = Vector2( 48, 64 )
+scale = Vector2( 4, 4 )
+z_index = 1
+texture = ExtResource( 24 )
+
+[node name="TweenMonster2" type="Tween" parent="MainMenu/MainMenuRoot/TitleMonster2"]
+
+[node name="TitleMonster3" type="Sprite" parent="MainMenu/MainMenuRoot"]
+modulate = Color( 0.79, 0.79, 0.79, 1 )
+position = Vector2( 112, 48 )
+scale = Vector2( 5, 5 )
+texture = ExtResource( 24 )
+
+[node name="TweenMonster3" type="Tween" parent="MainMenu/MainMenuRoot/TitleMonster3"]
+
+[node name="PlayerTitle" type="Sprite" parent="MainMenu/MainMenuRoot"]
+position = Vector2( 208, 80 )
+scale = Vector2( 10, 10 )
+texture = ExtResource( 25 )
+
+[node name="TweenPlayer" type="Tween" parent="MainMenu/MainMenuRoot/PlayerTitle"]
 
 [node name="GameOverlay" type="CanvasLayer" parent="."]
 
@@ -392,6 +426,7 @@ anims/Blink = SubResource( 4 )
 
 [node name="SuccessScreen" type="Control" parent="GameOverlay"]
 pause_mode = 2
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 13 )
