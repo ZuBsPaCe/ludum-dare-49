@@ -11,6 +11,8 @@ var level:int
 var health:int
 var coins:int
 
+var total_coins:int
+
 var player_bullet_speed := 384.0
 var monster_bullet_speed := 64.0
 
@@ -42,7 +44,7 @@ var _rounds_rect_front_tween : Tween
 var _rounds_rect_back_tween : Tween
 
 func _ready():
-	_hurted_cooldown.setup(self, 2.5, true, Cooldown.STOPPED)
+	_hurted_cooldown.setup(self, 1.8, true, Cooldown.STOPPED)
 	
 	_rounds_rect_front_tween = Tween.new()
 	add_child(_rounds_rect_front_tween)
@@ -73,6 +75,8 @@ func start_game():
 	level = -1
 	health = 3
 	coins = 0
+	
+	total_coins = 0
 	current_weapon_index = 0
 	
 	max_rounds_blaster = 5
@@ -127,6 +131,7 @@ func hurt_player():
 
 func add_coin():
 	coins += 1
+	total_coins += 1
 	_update_coin_label()
 	
 

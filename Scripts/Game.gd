@@ -1,14 +1,9 @@
 extends Node2D
 
 const MonsterType := preload("res://Scripts/MonsterType.gd").MonsterType
+const GameState := preload("res://Scripts/GameState.gd").GameState
 
 
-enum GameState {
-	NONE,
-	MAIN_MENU,
-	NEW_GAME,
-	LEVEL
-}
 
 
 export var player_scene:PackedScene
@@ -45,6 +40,8 @@ func _ready():
 		tank_scene
 	)
 	
+	Globals.connect("signal_switch_game_state", self,"_on_signal_switch_game_state")
+	
 	Mapper.setup(
 		$TileMap
 	)
@@ -58,22 +55,53 @@ func _ready():
 		$GameOverlay/MarginContainer/GridContainer/HBoxContainer3/RoundsContainer/RoundsRectFront,
 		$GameOverlay/MarginContainer/GridContainer/HBoxContainer3/RoundsContainer/RoundsRectBack)
 	
+	$MainMenu/MainMenuRoot.visible = false
+	$GameOverlay/MarginContainer.visible = false
+	$GameOverlay/DeathScreen.visible = false
+	
+	if OS.get_name() == "HTML5":
+		$MainMenu/MainMenuRoot/MarginContainer/HBoxContainer/VBoxContainer/ExitButton.visible = false
+	
 	switch_game_state(GameState.MAIN_MENU)
+
+
+func _input(event):
+	if state == GameState.DEATH:
+		if event is InputEventMouseButton || event is InputEventKey || event is InputEventJoypadButton:
+			Globals.switch_game_state(GameState.MAIN_MENU)
 
 
 func switch_game_state(new_state) -> void:
 	if state == new_state:
 		return
 		
-	match state:
+	var old_state = state
+	state = GameState.NONE
+	
+	if old_state != GameState.NONE && new_state != GameState.DEATH:
+		Globals.start_transition()
+		yield(Globals, "transition_showing")
+	
+	match old_state:
 		GameState.MAIN_MENU:
-			pass
+			main_menu_root.visible = false
+			
+		GameState.LEVEL:
+			game_overlay_root.visible = false
 
 		GameState.NEW_GAME:
 			pass
 
 		GameState.NONE:
 			pass
+			
+		GameState.DEATH:
+			$GameOverlay/DeathScreen.visible = false
+			
+			Engine.time_scale = 1.0
+			
+			
+			_stop_level()
 			
 		_:
 			assert(false, "Unknown game state %s" % new_state)
@@ -82,34 +110,29 @@ func switch_game_state(new_state) -> void:
 	
 	match new_state:
 		GameState.MAIN_MENU:
-			start_main_menu()
+			main_menu_root.visible = true
 
 		GameState.NEW_GAME:
-			start_game()
+			
+			Status.start_game()
+			switch_game_state(GameState.LEVEL)
 			
 		GameState.LEVEL:
 			start_level()
-
+			
+		GameState.DEATH:
+			$GameOverlay/DeathScreen.visible = true
+			
+			$GameOverlay/DeathScreen/DeathScreen/HBoxContainer/VBoxContainer2/LevelReachedLabel.text = str(Status.level + 1)
+			$GameOverlay/DeathScreen/DeathScreen/HBoxContainer/VBoxContainer2/ScoreLabel.text = str(Status.total_coins)
+			
+			
 		_:
 			assert(false, "Unknown game state %s" % new_state)
 			
-			
-func start_main_menu():
-	main_menu_root.visible = true
-	game_overlay_root.visible = false
-	
-
-func start_game():
-	
-	Globals.start_transition()
-	yield(Globals, "transition_showing")
-	
-	main_menu_root.visible = false
-	Status.start_game()
-	switch_game_state(GameState.LEVEL)
-
 
 func start_level():
+	
 	Status.start_level()
 	
 	
@@ -134,9 +157,28 @@ func start_level():
 		
 		var spawn_coord:Coord = Tools.rand_item(map.monster_spawn_coords)
 		Globals.create_monster(spawn_coord.to_center_pos(), monster_type)
+
+func _stop_level():
+	Globals.destroy_player()
 	
-	
+	for child in $DropContainer.get_children():
+		child.queue_free()
+
+	for child in $DeadContainer.get_children():
+		child.queue_free()
+		
+	for child in $EntityContainer.get_children():
+		child.queue_free()
 
 
 func _on_StartButton_pressed():
 	switch_game_state(GameState.NEW_GAME)
+
+
+
+func _on_signal_switch_game_state(game_state):
+	switch_game_state(game_state)
+
+
+func _on_ExitButton_pressed():
+	get_tree().quit()

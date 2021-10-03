@@ -15,6 +15,8 @@ const bullet_monster_mask := (1 << (1-1)) | (1 << (2-1))
 
 signal transition_showing
 
+signal signal_switch_game_state(game_state)
+
 var _enity_container
 var _drop_container
 var _dead_container
@@ -296,3 +298,7 @@ func start_transition():
 		
 	# warning-ignore:return_value_discarded
 	_transition_tween.start()
+
+
+func switch_game_state(game_state):
+	emit_signal("signal_switch_game_state", game_state)

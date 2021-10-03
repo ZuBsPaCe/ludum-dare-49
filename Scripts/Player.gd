@@ -2,6 +2,7 @@ extends KinematicBody2D
 
 
 const Direction := preload("res://Scripts/Tools/Direction.gd").Direction
+const GameState := preload("res://Scripts/GameState.gd").GameState
 
 export var speed := 64.0
 
@@ -136,7 +137,7 @@ func hurt():
 		
 		_start_black_hole_tween()
 	
-		yield(get_tree().create_timer(0.3), "timeout")
+		yield(get_tree().create_timer(0.15), "timeout")
 		
 		_animation_player.stop()
 		
@@ -184,6 +185,9 @@ func _start_black_hole_tween():
 	# warning-ignore:return_value_discarded
 	_black_hole_tween.start()
 
+	yield(_black_hole_tween,"tween_completed")
+
+	Globals.switch_game_state(GameState.DEATH)
 
 
 func _start_glow_tween():

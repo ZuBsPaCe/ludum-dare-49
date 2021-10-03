@@ -19,7 +19,7 @@ func setup(
 func generate_map(map:Map):
 	randomize()
 	var random_seed = randi()
-	random_seed = 1476648211
+	#random_seed = 1476648211
 	
 	seed(random_seed)
 	print("Seed: %s" % random_seed)
@@ -180,8 +180,11 @@ func generate_map(map:Map):
 		for x in map.width:
 			match map.get_item(x, y):
 				TileType.BLOCKED_WALL:
-					map.set_item(x, y, TileType.WALL)
+					
+					# No time for proper walk-over-map-border... Sorry...
+					#map.set_item(x, y, TileType.WALL)
 #					tilemap.set_cell(x, y, 0)
+					pass
 				TileType.BLOCKED_FLOOR:
 					map.set_item(x, y, TileType.FLOOR)
 #					tilemap.set_cell(x, y, 1)

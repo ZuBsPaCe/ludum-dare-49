@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://Scripts/Game.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/Tools/CameraShake.gd" type="Script" id=2]
@@ -21,6 +21,23 @@
 [ext_resource path="res://Fonts/VistorMainMenuSmall.tres" type="DynamicFont" id=20]
 [ext_resource path="res://Art/Title.png" type="Texture" id=21]
 [ext_resource path="res://Scenes/MainMenu.gd" type="Script" id=22]
+
+[sub_resource type="Animation" id=4]
+resource_name = "Blink"
+length = 2.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("ContinueMessage:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
 
 [sub_resource type="ViewportTexture" id=1]
 viewport_path = NodePath("ShadowViewport")
@@ -182,7 +199,6 @@ texture = ExtResource( 21 )
 [node name="GameOverlay" type="CanvasLayer" parent="."]
 
 [node name="MarginContainer" type="MarginContainer" parent="GameOverlay"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 13 )
@@ -287,6 +303,87 @@ margin_right = 80.0
 margin_bottom = 16.0
 text = "999999"
 
+[node name="DeathScreen" type="MarginContainer" parent="GameOverlay"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 13 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DeathScreen" type="VBoxContainer" parent="GameOverlay/DeathScreen"]
+margin_top = 95.0
+margin_right = 480.0
+margin_bottom = 175.0
+size_flags_vertical = 4
+
+[node name="DeathMessage" type="Label" parent="GameOverlay/DeathScreen/DeathScreen"]
+margin_right = 480.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 0, 40 )
+text = "You Died."
+align = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GameOverlay/DeathScreen/DeathScreen"]
+margin_top = 44.0
+margin_right = 480.0
+margin_bottom = 80.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameOverlay/DeathScreen/DeathScreen/HBoxContainer"]
+margin_right = 226.0
+margin_bottom = 36.0
+size_flags_horizontal = 3
+
+[node name="Label1" type="Label" parent="GameOverlay/DeathScreen/DeathScreen/HBoxContainer/VBoxContainer"]
+margin_right = 226.0
+margin_bottom = 16.0
+text = "Level reached:"
+align = 2
+
+[node name="Label2" type="Label" parent="GameOverlay/DeathScreen/DeathScreen/HBoxContainer/VBoxContainer"]
+margin_top = 20.0
+margin_right = 226.0
+margin_bottom = 36.0
+text = "Score:"
+align = 2
+
+[node name="Control" type="Control" parent="GameOverlay/DeathScreen/DeathScreen/HBoxContainer"]
+margin_left = 230.0
+margin_right = 250.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 20, 0 )
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="GameOverlay/DeathScreen/DeathScreen/HBoxContainer"]
+margin_left = 254.0
+margin_right = 480.0
+margin_bottom = 36.0
+size_flags_horizontal = 3
+
+[node name="LevelReachedLabel" type="Label" parent="GameOverlay/DeathScreen/DeathScreen/HBoxContainer/VBoxContainer2"]
+margin_right = 226.0
+margin_bottom = 16.0
+text = "999"
+
+[node name="ScoreLabel" type="Label" parent="GameOverlay/DeathScreen/DeathScreen/HBoxContainer/VBoxContainer2"]
+margin_top = 20.0
+margin_right = 226.0
+margin_bottom = 36.0
+text = "999"
+
+[node name="ContinueMessage" type="Label" parent="GameOverlay/DeathScreen/DeathScreen"]
+visible = false
+margin_top = 84.0
+margin_right = 480.0
+margin_bottom = 124.0
+rect_min_size = Vector2( 0, 40 )
+text = "Press a key to continue"
+align = 1
+valign = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="GameOverlay/DeathScreen/DeathScreen"]
+autoplay = "Blink"
+anims/Blink = SubResource( 4 )
+
 [node name="TransitionLayer" type="CanvasLayer" parent="."]
 
 [node name="TransitionSprite" type="Sprite" parent="TransitionLayer"]
@@ -321,3 +418,4 @@ format = 1
 [node name="EntityContainer" type="YSort" parent="."]
 
 [connection signal="pressed" from="MainMenu/MainMenuRoot/MarginContainer/HBoxContainer/VBoxContainer/StartButton" to="." method="_on_StartButton_pressed"]
+[connection signal="pressed" from="MainMenu/MainMenuRoot/MarginContainer/HBoxContainer/VBoxContainer/ExitButton" to="." method="_on_ExitButton_pressed"]
