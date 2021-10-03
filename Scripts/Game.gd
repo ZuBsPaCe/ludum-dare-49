@@ -2,6 +2,7 @@ extends Node2D
 
 const MonsterType := preload("res://Scripts/MonsterType.gd").MonsterType
 const GameState := preload("res://Scripts/GameState.gd").GameState
+const TileType := preload("res://Scripts/TileType.gd").TileType
 
 
 
@@ -21,6 +22,15 @@ onready var game_overlay_root := $GameOverlay/MarginContainer
 
 
 var state:int = GameState.NONE
+
+var first_wait_done:bool
+var door_open:bool
+
+var waiting_monsters := 0
+var spawn_cooldown := Cooldown.new()
+var first_wait_cooldown := Cooldown.new()
+
+var close_door_cooldown := Cooldown.new()
 
 
 func _ready():
@@ -64,6 +74,37 @@ func _ready():
 		$MainMenu/MainMenuRoot/MarginContainer/HBoxContainer/VBoxContainer/ExitButton.visible = false
 	
 	switch_game_state(GameState.MAIN_MENU)
+
+func _process(_delta):
+	if state == GameState.LEVEL:
+		if door_open:
+			if close_door_cooldown.done:
+				Mapper.set_tile(Globals.map.door_coord.x, Globals.map.door_coord.y, TileType.WALL)
+				door_open = false
+				spawn_cooldown.restart()
+		else:		
+			var open_door:= false
+			if !first_wait_done:
+				if first_wait_cooldown.done:
+					first_wait_done = true
+					spawn_cooldown.restart()
+					open_door = true
+			else:
+				if spawn_cooldown.done:
+					if waiting_monsters >= 3:
+						open_door = true
+					else:
+						spawn_monster()
+						waiting_monsters += 1
+						spawn_cooldown.restart()
+						
+			if open_door:
+				Mapper.set_tile(Globals.map.door_coord.x, Globals.map.door_coord.y, TileType.FLOOR)
+				close_door_cooldown.restart()
+				door_open = true
+				waiting_monsters = 0
+		
+
 
 
 func _input(event):
@@ -178,15 +219,45 @@ func start_level():
 	
 	Globals.create_player(map.player_spawn_coord.to_center_pos())
 	
-	for _i in range(20):
-		var monster_types := [MonsterType.GHOST, MonsterType.JELLY, MonsterType.SPIKE, MonsterType.TANK]
-		var monster_type = Tools.rand_item(monster_types)
-		
-		#monster_type = MonsterType.TANK
-		
-		var spawn_coord:Coord = Tools.rand_item(map.monster_spawn_coords)
-		Globals.create_monster(spawn_coord.to_center_pos(), monster_type)
+	spawn_cooldown.stop()
+	first_wait_cooldown.stop()
+	close_door_cooldown.stop()
+	
+	first_wait_cooldown.setup(self, 4.0, false)
+	first_wait_cooldown.restart()
+	
+	close_door_cooldown.setup(self, 6.0, false)
 
+	
+	door_open = false
+	first_wait_done = false
+	waiting_monsters = 0
+	var spawn_interval := 5 - Status.level
+	if spawn_interval < 1:
+		spawn_interval = 0
+	
+	spawn_cooldown.setup(self, spawn_interval, false, Cooldown.STOPPED)
+	
+	for _i in range(3):
+		yield(get_tree().create_timer(randf() * 0.4), "timeout")
+		spawn_monster()
+
+
+func spawn_monster():
+	var monster_types := []
+	
+	if Status.level == 0:
+		monster_types = [MonsterType.GHOST]
+	elif Status.level == 1:
+		monster_types = [MonsterType.GHOST, MonsterType.JELLY]
+	elif Status.level == 3:
+		monster_types = [MonsterType.GHOST, MonsterType.JELLY, MonsterType.SPIKE]
+	else:
+		 monster_types = [MonsterType.GHOST, MonsterType.JELLY, MonsterType.SPIKE, MonsterType.TANK]
+	
+	var monster_type = Tools.rand_item(monster_types)
+	var spawn_coord:Coord = Tools.rand_item(Globals.map.monster_spawn_coords)
+	Globals.create_monster(spawn_coord.to_center_pos(), monster_type)
 
 func _stop_level():
 	Globals.destroy_player()

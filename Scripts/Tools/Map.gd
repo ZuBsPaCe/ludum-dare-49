@@ -6,7 +6,7 @@ var height : int setget ,_get_height
 var size : int setget ,_get_size
 
 
-var door_coords := []
+var door_coord:Coord
 var monster_spawn_coords := []
 var player_spawn_coord:Coord
 

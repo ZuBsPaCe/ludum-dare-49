@@ -70,8 +70,8 @@ func generate_map(map:Map):
 
 	# Door
 	var door_coord := Coord.new(center_x,  center_y - 1)
-	map.set_item(door_coord.x, door_coord.y, TileType.FLOOR)
-	map.door_coords.append(door_coord)
+	#map.set_item(door_coord.x, door_coord.y, TileType.FLOOR)
+	map.door_coord = door_coord
 	
 	
 	map.set_item(center_x, center_y - 2, TileType.FLOOR)
@@ -309,7 +309,19 @@ func fill_tilemap(map:Map):
 			var tiletype = map.get_item(x, y)
 			_set_tile_on_tilemap(x, y, tiletype)
 			
-			if tiletype == TileType.FLOOR:
+			var can_orb:= true
+			
+			if tiletype != TileType.FLOOR:
+				can_orb = false
+			else:
+				for check in map.monster_spawn_coords:
+					if check.x == x && check.y == y:
+						can_orb = false
+						
+				if map.player_spawn_coord.x == x && map.player_spawn_coord.y == y:
+					can_orb = false
+			
+			if can_orb:
 				coord.x = x
 				coord.y = y
 				var orb = Globals.create_orb(coord.to_center_pos())

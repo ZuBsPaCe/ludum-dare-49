@@ -38,6 +38,8 @@ func restart():
 	_timer.start(secs)
 
 func stop():
+	if _timer == null:
+		return
 	_timer.stop()
 
 func _timeout():
