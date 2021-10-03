@@ -195,7 +195,7 @@ __meta__ = {
 
 [node name="Title" type="Sprite" parent="MainMenu/MainMenuRoot"]
 position = Vector2( 168, 192 )
-z_index = 4
+z_index = 7
 texture = ExtResource( 21 )
 
 [node name="TitleScaleTween" type="Tween" parent="MainMenu/MainMenuRoot/Title"]
@@ -230,6 +230,7 @@ texture = ExtResource( 24 )
 [node name="PlayerTitle" type="Sprite" parent="MainMenu/MainMenuRoot"]
 position = Vector2( 208, 80 )
 scale = Vector2( 10, 10 )
+z_index = 6
 texture = ExtResource( 25 )
 
 [node name="TweenPlayer" type="Tween" parent="MainMenu/MainMenuRoot/PlayerTitle"]
