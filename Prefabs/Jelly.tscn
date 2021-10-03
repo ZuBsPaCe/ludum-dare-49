@@ -1,10 +1,10 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://Sprites/Monster/Ghost.png" type="Texture" id=1]
+[ext_resource path="res://Sprites/Monster/Jelly.png" type="Texture" id=1]
 [ext_resource path="res://Scripts/Monster.gd" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 4, 5.5 )
+extents = Vector2( 5.5, 3 )
 
 [sub_resource type="Animation" id=2]
 resource_name = "WalkLeft"
@@ -16,10 +16,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.5 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
 "update": 1,
-"values": [ 2, 3 ]
+"values": [ 2 ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("Sprites/Outline:frame")
@@ -115,7 +115,7 @@ tracks/8/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Vector2( -0.5, -6 ) ]
+"values": [ Vector2( 0, -8.5 ) ]
 }
 tracks/9/type = "value"
 tracks/9/path = NodePath("Sprites/Glow:frame")
@@ -140,10 +140,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.5 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
 "update": 1,
-"values": [ 2, 3 ]
+"values": [ 2 ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("Sprites/Eyes:frame")
@@ -239,10 +239,10 @@ tracks/8/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Vector2( 0.5, -6 ) ]
+"values": [ Vector2( 0, -8.5 ) ]
 }
 
-[node name="Ghost" type="KinematicBody2D" groups=[
+[node name="Jelly" type="KinematicBody2D" groups=[
 "Monster",
 ]]
 collision_layer = 4
@@ -260,18 +260,21 @@ vframes = 6
 
 [node name="Fill" type="Sprite" parent="Sprites"]
 texture = ExtResource( 1 )
+flip_h = true
 hframes = 2
 vframes = 6
 frame = 2
 
 [node name="Outline" type="Sprite" parent="Sprites"]
 texture = ExtResource( 1 )
+flip_h = true
 hframes = 2
 vframes = 6
 frame = 4
 
 [node name="Eyes" type="Sprite" parent="Sprites"]
 texture = ExtResource( 1 )
+flip_h = true
 hframes = 2
 vframes = 6
 frame = 6
@@ -279,6 +282,7 @@ frame = 6
 [node name="EyesRed" type="Sprite" parent="Sprites"]
 visible = false
 texture = ExtResource( 1 )
+flip_h = true
 hframes = 2
 vframes = 6
 frame = 8
@@ -291,7 +295,7 @@ vframes = 6
 frame = 10
 
 [node name="Collision" type="CollisionShape2D" parent="."]
-position = Vector2( -0.5, -6 )
+position = Vector2( 0, -8.5 )
 shape = SubResource( 1 )
 
 [node name="Animation" type="AnimationPlayer" parent="."]

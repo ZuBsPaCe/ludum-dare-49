@@ -1,11 +1,20 @@
 extends KinematicBody2D
 
-export var speed := 64.0
 
 const Direction := preload("res://Scripts/Tools/Direction.gd").Direction
 const TileType := preload("res://Scripts/TileType.gd").TileType
+const MonsterType := preload("res://Scripts/MonsterType.gd").MonsterType
 
-onready var _glow_sprite := $Sprites/GlowSprite
+onready var sprites:Node2D = $Sprites
+onready var glow_sprite:Sprite = $Sprites/Glow
+onready var eyes_sprite:Sprite = $Sprites/Eyes
+onready var eyes_red_sprite:Sprite = $Sprites/EyesRed
+onready var eyes_dead_sprite:Sprite = $Sprites/EyesDead
+onready var collision_shape:CollisionShape2D = $Collision
+onready var animation_player:AnimationPlayer = $Animation
+
+
+var monsterType
 
 var _dir = Direction.N
 var _current_coord:= Coord.new()
@@ -15,20 +24,31 @@ var _target_velocity := Vector2.ZERO
 
 
 var _health:int
+var _speed:float
 
 func _ready():
 	pass
 
-func setup(pos:Vector2):
+func setup(pos:Vector2, p_monsterType, p_health, p_speed):
 	position = pos
+	monsterType = p_monsterType
+	_health = p_health
+	_speed = p_speed
 
 	yield(self, "ready")
-
-	_glow_sprite.visible = false
+	
+	sprites.visible = true
+	glow_sprite.visible = false
+	eyes_sprite.visible = true
+	eyes_red_sprite.visible = false
+	eyes_dead_sprite.visible = false
+	
+	collision_shape.visible = true
+	
+	animation_player.play("WalkLeft")
 	
 	_update_target_pos = true
-	
-	_health = 3
+
 	
 
 func _physics_process(_delta):
@@ -78,7 +98,7 @@ func _try_set_target_pos(current_pos:Coord, dir) -> bool:
 	if Globals.map.get_item(next_pos.x, next_pos.y) == TileType.FLOOR:
 		_dir = dir
 		_target_pos = next_pos.to_center_pos()
-		_target_velocity = Tools.get_vec_from_dir(dir) * speed
+		_target_velocity = Tools.get_vec_from_dir(dir) * _speed
 		return true
 	return false
 	
@@ -90,18 +110,36 @@ func hurt():
 	_health -= 1
 		
 	if _health == 0:
-		Globals.destroy_monster(self)
-		return
+		animation_player.stop()
 		
+		remove_child(collision_shape)
+		
+		sprites.position = Vector2.ZERO
+		
+		if randf() < 0.5:
+			sprites.global_rotation = deg2rad(-70.0 - randf() * 40.0)
+		else:
+			sprites.global_rotation = deg2rad(70.0 + randf() * 40.0)
+			
+		sprites.modulate.a = 0.6
+			
+		eyes_sprite.visible = false
+		eyes_red_sprite.visible = false
+		eyes_dead_sprite.visible = true
+		
+		set_process(false)
+		set_physics_process(false)
+		#Globals.destroy_monster(self)
 	
-	_glow_sprite.visible = true
+	
+	glow_sprite.visible = true
 	
 	var tween := Tween.new()
 	add_child(tween)
 
 	# warning-ignore:return_value_discarded
 	tween.interpolate_property(
-		_glow_sprite,
+		glow_sprite,
 		"modulate",
 		Color(1, 0, 0, 0.5),
 		Color(1, 0, 0, 0.0),
@@ -115,4 +153,4 @@ func hurt():
 	yield(tween, "tween_completed")
 	tween.queue_free()
 
-	_glow_sprite.visible = false
+	glow_sprite.visible = false

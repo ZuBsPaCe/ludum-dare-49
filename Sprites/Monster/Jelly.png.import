@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Ghost_glow.png-85870211e42422245378f11fd73ba52d.stex"
+path="res://.import/Jelly.png-8d94229c0615c745c9ac00c1001f5288.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/Monster/Ghost/Ghost_glow.png"
-dest_files=[ "res://.import/Ghost_glow.png-85870211e42422245378f11fd73ba52d.stex" ]
+source_file="res://Sprites/Monster/Jelly.png"
+dest_files=[ "res://.import/Jelly.png-8d94229c0615c745c9ac00c1001f5288.stex" ]
 
 [params]
 

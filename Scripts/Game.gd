@@ -1,5 +1,8 @@
 extends Node2D
 
+const MonsterType := preload("res://Scripts/MonsterType.gd").MonsterType
+
+
 enum GameState {
 	NONE,
 	MAIN_MENU,
@@ -10,8 +13,10 @@ enum GameState {
 
 export var player_scene:PackedScene
 export var bullet_scene:PackedScene
-export var monster_scene:PackedScene
 export var orb_scene:PackedScene
+
+export var ghost_scene:PackedScene
+export var jelly_scene:PackedScene
 
 
 var state:int = GameState.NONE
@@ -22,10 +27,12 @@ func _ready():
 		$Camera2D,
 		$EntityContainer,
 		$DropContainer,
+		$DeadContainer,
 		player_scene,
 		bullet_scene,
-		monster_scene,
-		orb_scene
+		orb_scene,
+		ghost_scene,
+		jelly_scene
 	)
 	
 	Mapper.setup(
@@ -95,8 +102,11 @@ func start_level():
 	
 	Globals.create_player(map.player_spawn_coord.to_center_pos())
 	
-	for _i in range(5):
+	for _i in range(10):
+		var monster_types := [MonsterType.GHOST, MonsterType.JELLY]
+		var monster_type = Tools.rand_item(monster_types)
+		
 		var spawn_coord:Coord = Tools.rand_item(map.monster_spawn_coords)
-		Globals.create_monster(spawn_coord.to_center_pos())
+		Globals.create_monster(spawn_coord.to_center_pos(), monster_type)
 	
 	

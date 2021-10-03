@@ -2,14 +2,18 @@ extends Node
 
 const TileType := preload("res://Scripts/TileType.gd").TileType
 const Direction := preload("res://Scripts/Tools/Direction.gd").Direction
+const MonsterType := preload("res://Scripts/MonsterType.gd").MonsterType
 
 var _enity_container
 var _drop_container
+var _dead_container
 
 var _player_scene:PackedScene
 var _bullet_scene:PackedScene
-var _monster_scene:PackedScene
 var _orb_scene:PackedScene
+
+var _ghost_scene:PackedScene
+var _jelly_scene:PackedScene
 
 var camera:Camera2D
 var player:KinematicBody2D
@@ -28,18 +32,24 @@ func setup(
 	p_camera: Camera2D,
 	p_entity_container,
 	p_drop_container,
+	p_dead_container,
 	p_player_scene: PackedScene,
 	p_bullet_scene: PackedScene,
-	p_monster_scene: PackedScene,
-	p_orb_scene: PackedScene):
+	p_orb_scene: PackedScene,
+	p_ghost_scene: PackedScene,
+	p_jelly_scene: PackedScene):
 
 	camera = p_camera
 	_enity_container = p_entity_container
 	_drop_container = p_drop_container
+	_dead_container = p_dead_container
 	_player_scene = p_player_scene
-	_monster_scene = p_monster_scene
+
 	_bullet_scene = p_bullet_scene
 	_orb_scene = p_orb_scene
+	
+	_ghost_scene = p_ghost_scene
+	_jelly_scene = p_jelly_scene
 
 func create_player(pos: Vector2) -> void:
 	assert(player == null)
@@ -61,14 +71,35 @@ func destroy_bullet(bullet):
 	_enity_container.remove_child(bullet)
 	bullet.queue_free()
 
-func create_monster(pos: Vector2) -> void:
-	var monster = _monster_scene.instance()
-	monster.setup(pos)
+func create_monster(pos: Vector2, monster_type) -> void:
+	var scene:PackedScene
+	
+	var health
+	var speed
+	
+	match monster_type:
+		MonsterType.GHOST:
+			scene = _ghost_scene
+			speed = 64.0
+			health = 3
+		MonsterType.JELLY:
+			scene = _jelly_scene
+			speed = 32.0
+			health = 3
+		_:
+			assert(false)
+	
+	var monster = scene.instance()
+	monster.setup(pos, monster_type, health, speed)
 	_enity_container.add_child(monster)
 	
-func destroy_monster(monster) -> void:
+func monster_died(monster) -> void:
 	_enity_container.remove_child(monster)
-	monster.queue_free()
+	_dead_container.add_child(monster)
+	
+#func destroy_monster(monster) -> void:
+#	_enity_container.remove_child(monster)
+#	monster.queue_free()
 
 func create_orb(pos: Vector2) -> Node2D:
 	var orb = _orb_scene.instance()

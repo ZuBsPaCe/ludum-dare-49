@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Ghost_albedo.png-08e5a8cae1659a8f1d9057c69bf89608.stex"
+path="res://.import/Ghost.png-221dbf053837a84809b9b6636cd25240.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/Monster/Ghost/Ghost_albedo.png"
-dest_files=[ "res://.import/Ghost_albedo.png-08e5a8cae1659a8f1d9057c69bf89608.stex" ]
+source_file="res://Sprites/Monster/Ghost.png"
+dest_files=[ "res://.import/Ghost.png-221dbf053837a84809b9b6636cd25240.stex" ]
 
 [params]
 

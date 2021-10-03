@@ -43,7 +43,7 @@ func start_shake(direction: Vector2, intensity: float, frequency: float, duratio
 
 func _bounce(first: bool):
 	if _intensity == 0.0 && offset == Vector2.ZERO:
-		print_debug("Bounce DONE")
+		#print_debug("Bounce DONE")
 		return
 
 	var new_offset := _direction * _intensity
@@ -59,7 +59,7 @@ func _bounce(first: bool):
 		var current_distance := new_offset.distance_to(offset)
 
 		var first_duration := current_distance / usual_distance * _bounce_time / 2.0 
-		print_debug("First duration: %s" % first_duration)
+		#print_debug("First duration: %s" % first_duration)
 
 		_bounce_tween.interpolate_property(self, "offset", offset,  new_offset, first_duration, Tween.TRANS_QUAD, Tween.EASE_OUT)
 	else:

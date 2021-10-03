@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Scripts/Game.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/Tools/CameraShake.gd" type="Script" id=2]
@@ -7,13 +7,14 @@
 [ext_resource path="res://Prefabs/Player.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Sprites/Floor/Floor.png" type="Texture" id=6]
 [ext_resource path="res://Prefabs/Bullet.tscn" type="PackedScene" id=7]
-[ext_resource path="res://Prefabs/Monster.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Prefabs/Ghost.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Art/Test-480-270.png" type="Texture" id=9]
 [ext_resource path="res://Sprites/Heart/Heart-Full.png" type="Texture" id=10]
 [ext_resource path="res://Prefabs/Orb.tscn" type="PackedScene" id=11]
 [ext_resource path="res://Sprites/Coin/Coin.png" type="Texture" id=12]
 [ext_resource path="res://Themes/Overlay.tres" type="Theme" id=13]
 [ext_resource path="res://Sprites/Ammo/Ammo.png" type="Texture" id=14]
+[ext_resource path="res://Prefabs/Jelly.tscn" type="PackedScene" id=15]
 
 [sub_resource type="ViewportTexture" id=1]
 viewport_path = NodePath("ShadowViewport")
@@ -62,8 +63,9 @@ points = PoolVector2Array( 0, 0, 16, 0, 16, 16, 0, 16 )
 script = ExtResource( 1 )
 player_scene = ExtResource( 5 )
 bullet_scene = ExtResource( 7 )
-monster_scene = ExtResource( 8 )
 orb_scene = ExtResource( 11 )
+ghost_scene = ExtResource( 8 )
+jelly_scene = ExtResource( 15 )
 
 [node name="ShadowViewport" type="Viewport" parent="."]
 size = Vector2( 1024, 1024 )
@@ -202,6 +204,8 @@ collision_mask = 0
 format = 1
 
 [node name="DropContainer" type="YSort" parent="."]
+
+[node name="DeadContainer" type="YSort" parent="."]
 
 [node name="EntityContainer" type="YSort" parent="."]
 
