@@ -4,6 +4,7 @@ extends KinematicBody2D
 const Direction := preload("res://Scripts/Tools/Direction.gd").Direction
 const GameState := preload("res://Scripts/GameState.gd").GameState
 const ItemType := preload("res://Scripts/ItemType.gd").ItemType
+const SoundType := preload("res://Scripts/SoundType.gd").SoundType
 
 
 
@@ -40,6 +41,9 @@ func _ready():
 	eyes_dead_sprite.visible = false
 	
 	$BlackHole.visible = false
+	
+	
+	
 	
 	
 func setup(pos:Vector2):
@@ -90,6 +94,7 @@ func _process(_delta):
 
 	if Input.is_action_pressed("left_click"):
 		if Status.try_fire():
+			Globals.play_sound(SoundType.PLAYER_FIRE)
 			Globals.shake(weapon_dir)
 			Globals.create_bullet(weapon.global_position, weapon_dir, true)
 
@@ -162,6 +167,8 @@ func hurt():
 			
 		eyes_sprite.visible = false
 		eyes_dead_sprite.visible = true
+		
+		Globals.play_sound(SoundType.PLAYER_DIES)
 		
 		set_process(false)
 		set_physics_process(false)

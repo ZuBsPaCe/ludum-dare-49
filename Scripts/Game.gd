@@ -6,7 +6,18 @@ const TileType := preload("res://Scripts/TileType.gd").TileType
 
 const ItemType := preload("res://Scripts/ItemType.gd").ItemType
 
+const SoundType := preload("res://Scripts/SoundType.gd").SoundType
 
+
+const player_fire1 := preload("res://Sounds/GunFire1.wav")
+const player_hurt1 := preload("res://Sounds/Ouch.wav")
+const coin_pickup1 := preload("res://Sounds/Coin.wav")
+const buy_something1 := preload("res://Sounds/BuySomething.wav")
+const monster_kill1 := preload("res://Sounds/MonsterKill.wav")
+const monster_kill2 := preload("res://Sounds/MonsterKill2.wav")
+const player_dies := preload("res://Sounds/PlayerDies.wav")
+const monster_hurt := preload("res://Sounds/MonsterHurt.wav")
+const level_start_klick := preload("res://Sounds/LevelStartKlick.wav")
 
 
 export var player_scene:PackedScene
@@ -29,6 +40,7 @@ onready var buy_button4 := $GameOverlay/SuccessScreen/MarginContainer/VBoxContai
 onready var money_button1 := $GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer/BuyRight/MoneyButton1
 onready var money_button2 := $GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer/BuyRight/MoneyButton2
 
+onready var sounds := $Sounds
 
 var state:int = GameState.NONE
 
@@ -50,6 +62,7 @@ func _ready():
 		$DeadContainer,
 		$TransitionLayer/TransitionSprite,
 		$TransitionLayer/TransitionSprite/TransitionTween,
+		sounds,
 		player_scene,
 		bullet_scene,
 		orb_scene,
@@ -58,6 +71,21 @@ func _ready():
 		spike_scene,
 		tank_scene
 	)
+	
+
+	sounds.register(SoundType.PLAYER_FIRE, player_fire1, 70)
+	
+	sounds.register(SoundType.PLAYER_HURT, player_hurt1, 70)
+	sounds.register(SoundType.COIN_PICKUP, coin_pickup1, 70)
+	sounds.register(SoundType.BUY_SOMETHING, buy_something1, 70)
+	
+	sounds.register(SoundType.MONSTER_KILL, monster_kill1, 70)
+	sounds.register(SoundType.MONSTER_KILL, monster_kill2, 70)
+	
+	sounds.register(SoundType.PLAYER_DIES, player_dies, 70)
+	sounds.register(SoundType.MONSTER_HURT, monster_hurt, 70)
+	sounds.register(SoundType.LEVEL_START_KLICK, level_start_klick, 70)
+	
 	
 	Globals.connect("signal_switch_game_state", self,"_on_signal_switch_game_state")
 	
@@ -85,6 +113,10 @@ func _ready():
 	switch_game_state(GameState.MAIN_MENU)
 
 func _process(_delta):
+	if Globals.player != null:
+		#sounds.player_pos = Globals.player.global_position
+		sounds.global_position = Globals.player.global_position
+	
 	if state == GameState.LEVEL:
 		if door_open:
 			if close_door_cooldown.done:
@@ -288,6 +320,8 @@ func _stop_level():
 
 
 func _on_StartButton_pressed():
+	Globals.play_sound(SoundType.LEVEL_START_KLICK)
+	
 	switch_game_state(GameState.NEW_GAME)
 
 
@@ -301,6 +335,7 @@ func _on_ExitButton_pressed():
 
 
 func _on_ContinueButton_pressed():
+	Globals.play_sound(SoundType.LEVEL_START_KLICK)
 	switch_game_state(GameState.NEXT_LEVEL)
 	
 	

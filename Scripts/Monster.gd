@@ -5,6 +5,7 @@ const Direction := preload("res://Scripts/Tools/Direction.gd").Direction
 const TileType := preload("res://Scripts/TileType.gd").TileType
 const MonsterType := preload("res://Scripts/MonsterType.gd").MonsterType
 const ItemType := preload("res://Scripts/ItemType.gd").ItemType
+const SoundType := preload("res://Scripts/SoundType.gd").SoundType
 
 onready var sprites:Node2D = $Sprites
 onready var glow_sprite:Sprite = $Sprites/Glow
@@ -215,6 +216,8 @@ func hurt():
 	_health -= 1
 		
 	if _health == 0:
+		Globals.play_sound(SoundType.MONSTER_KILL)
+		
 		animation_player.stop()
 		
 		remove_child(collision_shape)
@@ -235,6 +238,9 @@ func hurt():
 		set_process(false)
 		set_physics_process(false)
 		#Globals.destroy_monster(self)
+		
+	else:
+		Globals.play_sound(SoundType.MONSTER_HURT)
 	
 	
 	glow_sprite.visible = true

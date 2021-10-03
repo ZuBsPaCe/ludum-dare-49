@@ -7,6 +7,7 @@ const WeaponType := preload("res://Scripts/WeaponType.gd").WeaponType
 const GameState := preload("res://Scripts/GameState.gd").GameState
 const ItemType := preload("res://Scripts/ItemType.gd").ItemType
 
+const SoundType := preload("res://Scripts/SoundType.gd").SoundType
 
 var level:int
 var health:int
@@ -137,6 +138,8 @@ func hurt_player():
 	if health == 0:
 		Engine.time_scale = 0.1
 		return
+	else:
+		Globals.play_sound(SoundType.PLAYER_HURT)
 
 func add_coin():
 	coins += 1
@@ -145,13 +148,20 @@ func add_coin():
 	
 	_update_coin_label()
 	
-	if coins_to_pickup <= 0 || true: # || coins > level * 10:
-		coins += 200
+	if coins_to_pickup <= 0:# || true: # || coins > level * 10:
+		#coins += 200
 		Globals.switch_game_state(GameState.LEVEL_SUCCESS)
+	else:
+		Globals.play_sound(SoundType.COIN_PICKUP)
 
 func change_coins(change:int) -> bool:
 	if change < 0 && abs(change) > coins:
 		return false
+		
+	if change > 0:
+		Globals.play_sound(SoundType.COIN_PICKUP)
+	else:
+		Globals.play_sound(SoundType.BUY_SOMETHING)
 		
 	coins += change
 	_update_coin_label()

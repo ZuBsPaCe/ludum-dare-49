@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/LevelStartKlick.wav-1d6e45b28bc26669d562d0db315becb7.sample"
+
+[deps]
+
+source_file="res://Sounds/LevelStartKlick.wav"
+dest_files=[ "res://.import/LevelStartKlick.wav-1d6e45b28bc26669d562d0db315becb7.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

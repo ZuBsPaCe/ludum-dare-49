@@ -36,6 +36,8 @@ var _tank_scene:PackedScene
 var camera:Camera2D
 var player:KinematicBody2D
 
+var _sounds
+
 var map:Map
 
 var _shake
@@ -54,6 +56,7 @@ func setup(
 	p_dead_container,
 	p_transition_sprite:Sprite,
 	p_transition_tween:Tween,
+	p_sounds,
 	p_player_scene: PackedScene,
 	p_bullet_scene: PackedScene,
 	p_orb_scene: PackedScene,
@@ -68,6 +71,7 @@ func setup(
 	_dead_container = p_dead_container
 	_transition_sprite = p_transition_sprite
 	_transition_tween = p_transition_tween
+	_sounds = p_sounds
 	_player_scene = p_player_scene
 
 	_bullet_scene = p_bullet_scene
@@ -77,6 +81,9 @@ func setup(
 	_jelly_scene = p_jelly_scene
 	_spike_scene = p_spike_scene
 	_tank_scene = p_tank_scene
+	
+func play_sound(key, pos = null):
+	_sounds.play(key, pos)
 
 func create_player(pos: Vector2) -> void:
 	assert(player == null)

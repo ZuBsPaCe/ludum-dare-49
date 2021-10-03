@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://Scripts/Game.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/Tools/CameraShake.gd" type="Script" id=2]
@@ -22,6 +22,7 @@
 [ext_resource path="res://Fonts/VistorMainMenuSmall.tres" type="DynamicFont" id=20]
 [ext_resource path="res://Art/Title.png" type="Texture" id=21]
 [ext_resource path="res://Scenes/MainMenu.gd" type="Script" id=22]
+[ext_resource path="res://Scripts/Sounds.gd" type="Script" id=23]
 
 [sub_resource type="Animation" id=4]
 resource_name = "Blink"
@@ -547,6 +548,9 @@ format = 1
 [node name="DeadContainer" type="YSort" parent="."]
 
 [node name="EntityContainer" type="YSort" parent="."]
+
+[node name="Sounds" type="Node2D" parent="."]
+script = ExtResource( 23 )
 
 [connection signal="pressed" from="MainMenu/MainMenuRoot/MarginContainer/HBoxContainer/VBoxContainer/StartButton" to="." method="_on_StartButton_pressed"]
 [connection signal="pressed" from="MainMenu/MainMenuRoot/MarginContainer/HBoxContainer/VBoxContainer/ExitButton" to="." method="_on_ExitButton_pressed"]
