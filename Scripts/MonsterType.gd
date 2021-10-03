@@ -1,5 +1,6 @@
 enum MonsterType {
 	GHOST,
 	JELLY,
-	SPIKE
+	SPIKE,
+	TANK
 }

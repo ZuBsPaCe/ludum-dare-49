@@ -29,8 +29,14 @@ var _speed:float
 var _shoot_animation:bool
 var _is_shooting:bool
 
-var _shoot_cooldown:Cooldown
+var _turn_sprites:bool
 
+var _shoot_cooldown:Cooldown
+var _check_cooldown:Cooldown
+
+
+var _tank_shoot_cooldown:Cooldown
+var _tank_fire:bool
 
 func _ready():
 	pass
@@ -44,6 +50,7 @@ func setup(pos:Vector2, p_monsterType, p_health, p_speed):
 	_shoot_cooldown = null
 	_shoot_animation = false
 	_is_shooting = false
+	_turn_sprites = false
 	
 	match monster_type:
 		MonsterType.GHOST:
@@ -55,7 +62,19 @@ func setup(pos:Vector2, p_monsterType, p_health, p_speed):
 			_shoot_cooldown = Cooldown.new()
 			_shoot_cooldown.setup(self, 6.0, true)
 			_shoot_animation = true
+		MonsterType.TANK:
+			_shoot_cooldown = Cooldown.new()
+			_shoot_cooldown.setup(self, 8.0, true)
+			
+			_tank_shoot_cooldown = Cooldown.new()
+			_tank_shoot_cooldown.setup(self, 0.1, true)
+			
+			_shoot_animation = true
+			_turn_sprites = true
 	
+	
+	_check_cooldown = Cooldown.new()
+	_check_cooldown.setup(self, 1.0, true)
 
 	yield(self, "ready")
 	
@@ -77,9 +96,15 @@ func _physics_process(_delta):
 
 	if _is_shooting:
 		if animation_player.is_playing():
+			
+			if monster_type == MonsterType.TANK:
+				_fire_tank()
+			
 			return
+			
+			
 		_is_shooting = false
-		animation_player.play("WalkLeft")
+		_tank_fire = false
 
 	if !_update_target_pos:
 		match _dir:
@@ -122,16 +147,47 @@ func _physics_process(_delta):
 	# warning-ignore:return_value_discarded
 	move_and_slide(_target_velocity)
 	
-	if _shoot_cooldown != null && _shoot_cooldown.done:
-		_shoot_cooldown.restart()
-		if Tools.raycast_to(self, Globals.player, Globals.wall_player_mask, 16.0 * 16.0):
+	if !_turn_sprites:
+		if _dir == Direction.W:
+			animation_player.play("WalkLeft")
+		elif _dir == Direction.E:
+			animation_player.play("WalkRight")
+	else:
+		match _dir:
+			Direction.N:
+				sprites.rotation_degrees = 90
+			Direction.E:
+				sprites.rotation_degrees = 180
+			Direction.S:
+				sprites.rotation_degrees = -90
+			_:
+				sprites.rotation_degrees = 0
+		animation_player.play("WalkLeft")
+	
+	if _shoot_cooldown != null && _shoot_cooldown.done && _check_cooldown.done:
+		_check_cooldown.secs = 0.25 + randf() * 0.25
+		_check_cooldown.restart()
+		
+		var target_found := false
+		if monster_type == MonsterType.TANK:
+			if Tools.raycast_to(collision_shape.global_position, Globals.player.collision_shape.global_position, Globals.player, Globals.wall_player_mask, 16.0 * 16.0):
+				var target_vec:Vector2 = (Globals.player.collision_shape.global_position - collision_shape.global_position).normalized()
+				var dir_vec:Vector2 = Tools.get_vec_from_dir(_dir)
+				target_found = rad2deg(target_vec.angle_to(dir_vec)) < 25.0
+			
+		else:
+			target_found = Tools.raycast_to(collision_shape.global_position, Globals.player.collision_shape.global_position, Globals.player, Globals.wall_player_mask, 16.0 * 16.0)
+			
+		if target_found:
 			if !_shoot_animation:
 				var dir:Vector2 = (Globals.player.position - self.position).normalized()
-				Globals.create_bullet(position + dir * 6.0, dir,  false)
+				Globals.create_bullet(collision_shape.global_position + dir * 6.0, dir,  false)
 			else:
 				_is_shooting = true
 				animation_player.stop()
 				animation_player.play("ShootLeft")
+				
+			_shoot_cooldown.restart()
 
 
 func _try_set_target_pos(current_pos:Coord, dir) -> bool:
@@ -202,4 +258,20 @@ func fire_spike():
 		var angle := randf() * 2.0 * PI
 		var dir := Vector2.UP.rotated(angle)
 		
-		Globals.create_bullet(position, dir, false)
+		Globals.create_bullet(collision_shape.global_position, dir, false)
+		
+func fire_tank_start():
+	_tank_fire = true
+	
+func fire_tank_stop():
+	_tank_fire = false
+	
+func _fire_tank():
+	if _tank_fire && _tank_shoot_cooldown.done:
+		_tank_shoot_cooldown.restart()
+	
+		var dir_vec:Vector2 = Tools.get_vec_from_dir(_dir)
+		
+		dir_vec = dir_vec.rotated(deg2rad(randf() * 30.0 - 15.0))
+		
+		Globals.create_bullet(collision_shape.global_position, dir_vec, false, 256.0)

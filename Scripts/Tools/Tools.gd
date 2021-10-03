@@ -109,12 +109,17 @@ func raycast_dir(from: PhysicsBody2D, dir: Vector2, view_distance: float) -> Obj
 	return _raycast.get_collider()
 
 
-func raycast_to(from: PhysicsBody2D, to: PhysicsBody2D, collision_mask:int, view_distance: float) -> bool:
+func raycast_to(pos:Vector2, target_pos:Vector2, to: PhysicsBody2D, collision_mask:int, view_distance: float) -> bool:
+	
+	if to == null:
+		return false
 #	raycast.clear_exceptions()
 #	raycast.add_exception(from)
 
-	_raycast.position = from.position
-	_raycast.cast_to = (to.position - from.position).clamped(view_distance)
+	#_raycast.position = from.position
+	_raycast.position = pos
+	
+	_raycast.cast_to = (target_pos - pos).clamped(view_distance)
 	_raycast.collision_mask = collision_mask
 
 	_raycast.force_raycast_update()

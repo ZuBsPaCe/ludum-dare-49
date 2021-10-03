@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Scripts/Game.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/Tools/CameraShake.gd" type="Script" id=2]
@@ -16,6 +16,7 @@
 [ext_resource path="res://Sprites/Ammo/Ammo.png" type="Texture" id=14]
 [ext_resource path="res://Prefabs/Jelly.tscn" type="PackedScene" id=15]
 [ext_resource path="res://Prefabs/Spike.tscn" type="PackedScene" id=16]
+[ext_resource path="res://Prefabs/Tank.tscn" type="PackedScene" id=17]
 
 [sub_resource type="ViewportTexture" id=1]
 viewport_path = NodePath("ShadowViewport")
@@ -68,6 +69,7 @@ orb_scene = ExtResource( 11 )
 ghost_scene = ExtResource( 8 )
 jelly_scene = ExtResource( 15 )
 spike_scene = ExtResource( 16 )
+tank_scene = ExtResource( 17 )
 
 [node name="ShadowViewport" type="Viewport" parent="."]
 size = Vector2( 1024, 1024 )

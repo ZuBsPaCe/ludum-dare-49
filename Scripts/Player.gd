@@ -7,9 +7,11 @@ onready var _weapon_right := $WeaponRight
 onready var _weapon_left := $WeaponLeft
 onready var _center := $Center
 
+onready var collision_shape := $CollisionShape2D
 
 var _target_velocity := Vector2.ZERO
 var _current_coord := Coord.new()
+
 
 
 func _ready():
@@ -60,7 +62,7 @@ func _process(_delta):
 			Globals.shake(weapon_dir)
 			Globals.create_bullet(weapon.global_position, weapon_dir, true)
 
-func _input(event):
+func _input(_event):
 	if Input.is_action_pressed("next_weapon"):
 		Status.select_next_weapon()
 	elif Input.is_action_pressed("prev_weapon"):

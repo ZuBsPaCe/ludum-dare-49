@@ -24,6 +24,7 @@ var _orb_scene:PackedScene
 var _ghost_scene:PackedScene
 var _jelly_scene:PackedScene
 var _spike_scene:PackedScene
+var _tank_scene:PackedScene
 
 var camera:Camera2D
 var player:KinematicBody2D
@@ -49,7 +50,8 @@ func setup(
 	p_orb_scene: PackedScene,
 	p_ghost_scene: PackedScene,
 	p_jelly_scene: PackedScene,
-	p_spike_scene: PackedScene):
+	p_spike_scene: PackedScene,
+	p_tank_scene: PackedScene):
 
 	camera = p_camera
 	_enity_container = p_entity_container
@@ -63,6 +65,7 @@ func setup(
 	_ghost_scene = p_ghost_scene
 	_jelly_scene = p_jelly_scene
 	_spike_scene = p_spike_scene
+	_tank_scene = p_tank_scene
 
 func create_player(pos: Vector2) -> void:
 	assert(player == null)
@@ -75,7 +78,7 @@ func destroy_player() -> void:
 	player.queue_free()
 	player = null
 
-func create_bullet(pos: Vector2, dir: Vector2, from_player: bool) -> void:
+func create_bullet(pos: Vector2, dir: Vector2, from_player: bool, speed_override = null) -> void:
 	var layer:int
 	var mask:int
 	var speed:int
@@ -88,6 +91,9 @@ func create_bullet(pos: Vector2, dir: Vector2, from_player: bool) -> void:
 		layer = bullet_monster_layer
 		mask = bullet_monster_mask
 		speed = Status.monster_bullet_speed
+		
+	if speed_override != null:
+		speed = speed_override
 	
 	var bullet = _bullet_scene.instance()
 	bullet.setup(pos, dir, speed, from_player, layer, mask)
@@ -116,6 +122,10 @@ func create_monster(pos: Vector2, monster_type) -> void:
 			scene = _spike_scene
 			speed = 16.0
 			health = 5
+		MonsterType.TANK:
+			scene = _tank_scene
+			speed = 12.0
+			health = 8
 		_:
 			assert(false)
 	

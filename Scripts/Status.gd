@@ -207,7 +207,9 @@ func _update_rounds(reload:bool, fast = false):
 	
 	
 	if fast:
+		# warning-ignore:return_value_discarded
 		_rounds_rect_front_tween.stop(_rounds_rect_front)
+		# warning-ignore:return_value_discarded
 		_rounds_rect_back_tween.stop(_rounds_rect_back)
 		
 		_rounds_rect_back.rect_scale = scale

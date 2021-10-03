@@ -18,6 +18,7 @@ export var orb_scene:PackedScene
 export var ghost_scene:PackedScene
 export var jelly_scene:PackedScene
 export var spike_scene:PackedScene
+export var tank_scene:PackedScene
 
 
 var state:int = GameState.NONE
@@ -34,7 +35,8 @@ func _ready():
 		orb_scene,
 		ghost_scene,
 		jelly_scene,
-		spike_scene
+		spike_scene,
+		tank_scene
 	)
 	
 	Mapper.setup(
@@ -106,11 +108,11 @@ func start_level():
 	
 	Globals.create_player(map.player_spawn_coord.to_center_pos())
 	
-	for _i in range(10):
-		var monster_types := [MonsterType.GHOST, MonsterType.JELLY, MonsterType.SPIKE]
+	for _i in range(20):
+		var monster_types := [MonsterType.GHOST, MonsterType.JELLY, MonsterType.SPIKE, MonsterType.TANK]
 		var monster_type = Tools.rand_item(monster_types)
 		
-		monster_type = MonsterType.SPIKE
+		#monster_type = MonsterType.TANK
 		
 		var spawn_coord:Coord = Tools.rand_item(map.monster_spawn_coords)
 		Globals.create_monster(spawn_coord.to_center_pos(), monster_type)
