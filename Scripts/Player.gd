@@ -1,6 +1,8 @@
 extends KinematicBody2D
 
 
+const Direction := preload("res://Scripts/Tools/Direction.gd").Direction
+
 export var speed := 64.0
 
 onready var _weapon_right := $WeaponRight
@@ -8,6 +10,14 @@ onready var _weapon_left := $WeaponLeft
 onready var _center := $Center
 
 onready var collision_shape := $CollisionShape2D
+onready var glow_sprite := $Sprites/Glow
+onready var auro_sprite := $Sprites/Aura
+onready var eyes_sprite := $Sprites/Eyes
+onready var eyes_dead_sprite := $Sprites/EyesDead
+
+
+onready var _animation_player := $AnimationPlayer
+var _animation_dir = Direction.W
 
 var _target_velocity := Vector2.ZERO
 var _current_coord := Coord.new()
@@ -15,11 +25,15 @@ var _current_coord := Coord.new()
 
 
 func _ready():
-	pass
+	auro_sprite.visible = true
+	glow_sprite.visible = false
+	eyes_sprite.visible = true
+	eyes_dead_sprite.visible = false
 	
 	
 func setup(pos:Vector2):
 	position = pos
+
 
 func _process(_delta):
 	_target_velocity = Vector2.ZERO
@@ -80,8 +94,79 @@ func _physics_process(_delta):
 		if _current_coord.set_vector_if_changed(position):
 			Globals.try_pickup_orb(_current_coord)
 		
+		if _target_velocity.x > 0:
+			_animation_dir = Direction.E
+		elif _target_velocity.y < 0:
+			_animation_dir = Direction.W
 		
+		if _animation_dir == Direction.W:
+			_animation_player.play("WalkLeft")
+		else:
+			_animation_player.play("WalkRight")
+		
+	else:
+		if _animation_dir == Direction.W:
+			_animation_player.play("IdleLeft")
+		else:
+			_animation_player.play("IdleRight")
 
 func _on_HurtArea2D_body_entered(body):
 	if body.is_in_group("Monster"):
-		Status.hurt_player()
+		hurt()
+
+
+func hurt():
+	Status.hurt_player()
+	
+	
+	glow_sprite.visible = true
+	
+	var tween := Tween.new()
+	add_child(tween)
+
+	# warning-ignore:return_value_discarded
+	tween.interpolate_property(
+		glow_sprite,
+		"modulate",
+		Color(1, 0, 0, 0.5),
+		Color(1, 0, 0, 0.0),
+		1.0,
+		Tween.TRANS_LINEAR, 
+		Tween.EASE_IN_OUT)
+		
+	# warning-ignore:return_value_discarded
+	tween.start()
+	
+	auro_sprite.visible = false
+
+	yield(tween, "tween_completed")
+	tween.queue_free()
+
+	glow_sprite.visible = false
+	
+
+	if Status.health > 0:
+		
+			
+		var tween_aura := Tween.new()
+		add_child(tween_aura)
+		auro_sprite.modulate = Color(1, 1, 1, 0.0)
+		auro_sprite.visible = true
+		
+		# warning-ignore:return_value_discarded
+		tween_aura.interpolate_property(
+			auro_sprite,
+			"modulate",
+			Color(1, 1, 1, 0.0),
+			Color(1, 1, 1, 1.0),
+			2.0,
+			Tween.TRANS_LINEAR, 
+			Tween.EASE_IN_OUT)
+	
+		
+		# warning-ignore:return_value_discarded
+		tween_aura.start()
+
+		yield(tween_aura, "tween_completed")
+
+		tween_aura.queue_free()

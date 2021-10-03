@@ -295,7 +295,6 @@ hframes = 2
 vframes = 6
 
 [node name="Fill" type="Sprite" parent="Sprites"]
-visible = false
 texture = ExtResource( 1 )
 hframes = 2
 vframes = 6

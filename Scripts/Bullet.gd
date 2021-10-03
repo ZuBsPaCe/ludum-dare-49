@@ -44,7 +44,7 @@ func _on_Bullet_body_entered(body):
 		body.hurt()
 		Globals.destroy_bullet(self)
 	elif body.is_in_group("Player"):
-		Status.hurt_player()
+		body.hurt()
 		Globals.destroy_bullet(self)
 	else:
 		if body.is_in_group("Tilemap"):
