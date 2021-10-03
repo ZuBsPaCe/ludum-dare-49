@@ -282,22 +282,27 @@ func start_transition():
 
 	_transition_sprite.visible = true
 	_transition_sprite.texture = tex
+	_transition_sprite.position = Vector2(240, 136)
 	
 	emit_signal("transition_showing")
 	
 	yield(get_tree().create_timer(0.2), "timeout")
 	
-	_transition_tween.interpolate_property(
+	
+	
+	var ok := _transition_tween.interpolate_property(
 		_transition_sprite,
 		"position",
-		_transition_sprite.position,
-		_transition_sprite.position + Vector2.UP * 500,
+		Vector2(240, 136),
+		Vector2(240, 136) + Vector2.UP * 500,
 		0.75,
 		Tween.TRANS_BACK, 
 		Tween.EASE_IN)
 		
 	# warning-ignore:return_value_discarded
-	_transition_tween.start()
+	ok = _transition_tween.start()
+	
+	assert(ok)
 
 
 func switch_game_state(game_state):

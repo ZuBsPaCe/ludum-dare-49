@@ -4,6 +4,7 @@ const _full_heart_tex := preload("res://Sprites/Heart/Heart-Full.png")
 const _empty_heart_tex := preload("res://Sprites/Heart/Heart-Empty.png")
 
 const WeaponType := preload("res://Scripts/WeaponType.gd").WeaponType
+const GameState := preload("res://Scripts/GameState.gd").GameState
 
 
 
@@ -12,6 +13,7 @@ var health:int
 var coins:int
 
 var total_coins:int
+var coins_to_pickup:int
 
 var player_bullet_speed := 384.0
 var monster_bullet_speed := 64.0
@@ -132,7 +134,13 @@ func hurt_player():
 func add_coin():
 	coins += 1
 	total_coins += 1
+	coins_to_pickup -= 1
+	
 	_update_coin_label()
+	
+	if coins_to_pickup <= 0: # || coins > level * 10:
+		
+		Globals.switch_game_state(GameState.LEVEL_SUCCESS)
 	
 
 func try_fire() -> bool:

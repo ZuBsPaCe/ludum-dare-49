@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://Scripts/Game.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/Tools/CameraShake.gd" type="Script" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://Sprites/Floor/Floor.png" type="Texture" id=6]
 [ext_resource path="res://Prefabs/Bullet.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Prefabs/Ghost.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Fonts/VistorOverlayLarge.tres" type="DynamicFont" id=9]
 [ext_resource path="res://Sprites/Heart/Heart-Full.png" type="Texture" id=10]
 [ext_resource path="res://Prefabs/Orb.tscn" type="PackedScene" id=11]
 [ext_resource path="res://Sprites/Coin/Coin.png" type="Texture" id=12]
@@ -24,19 +25,20 @@
 
 [sub_resource type="Animation" id=4]
 resource_name = "Blink"
-length = 2.0
+length = 0.1
 loop = true
+step = 0.0
 tracks/0/type = "value"
-tracks/0/path = NodePath("ContinueMessage:visible")
+tracks/0/path = NodePath("ContinueMessage:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 1 ),
+"times": PoolRealArray( 0, 0.048334 ),
 "transitions": PoolRealArray( 1, 1 ),
-"update": 1,
-"values": [ true, false ]
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0.392157 ) ]
 }
 
 [sub_resource type="ViewportTexture" id=1]
@@ -104,6 +106,7 @@ size = 960.0
 [node name="MainMenu" type="CanvasLayer" parent="."]
 
 [node name="MainMenuRoot" type="Control" parent="MainMenu"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 22 )
@@ -199,6 +202,7 @@ texture = ExtResource( 21 )
 [node name="GameOverlay" type="CanvasLayer" parent="."]
 
 [node name="MarginContainer" type="MarginContainer" parent="GameOverlay"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 13 )
@@ -312,9 +316,9 @@ __meta__ = {
 }
 
 [node name="DeathScreen" type="VBoxContainer" parent="GameOverlay/DeathScreen"]
-margin_top = 95.0
+margin_top = 73.0
 margin_right = 480.0
-margin_bottom = 175.0
+margin_bottom = 197.0
 size_flags_vertical = 4
 
 [node name="DeathMessage" type="Label" parent="GameOverlay/DeathScreen/DeathScreen"]
@@ -371,23 +375,110 @@ margin_bottom = 36.0
 text = "999"
 
 [node name="ContinueMessage" type="Label" parent="GameOverlay/DeathScreen/DeathScreen"]
-visible = false
 margin_top = 84.0
 margin_right = 480.0
 margin_bottom = 124.0
 rect_min_size = Vector2( 0, 40 )
-text = "Press a key to continue"
+text = "Press key to continue"
 align = 1
 valign = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="GameOverlay/DeathScreen/DeathScreen"]
+pause_mode = 2
 autoplay = "Blink"
 anims/Blink = SubResource( 4 )
+
+[node name="SuccessScreen" type="Control" parent="GameOverlay"]
+pause_mode = 2
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 13 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SuccessLabel" type="Label" parent="GameOverlay/SuccessScreen"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -102.5
+margin_top = 50.0
+margin_right = 102.5
+margin_bottom = 34.0
+custom_fonts/font = ExtResource( 9 )
+text = "Well done!"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="GameOverlay/SuccessScreen"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 13 )
+custom_constants/margin_right = 50
+custom_constants/margin_top = 120
+custom_constants/margin_left = 50
+custom_constants/margin_bottom = 20
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameOverlay/SuccessScreen/MarginContainer"]
+margin_left = 50.0
+margin_top = 120.0
+margin_right = 430.0
+margin_bottom = 250.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer"]
+margin_right = 380.0
+margin_bottom = 22.0
+
+[node name="BuyLeft" type="VBoxContainer" parent="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer"]
+margin_right = 150.0
+margin_bottom = 22.0
+rect_min_size = Vector2( 150, 0 )
+size_flags_horizontal = 4
+
+[node name="BuyButton" type="Button" parent="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer/BuyLeft"]
+margin_right = 150.0
+margin_bottom = 22.0
+
+[node name="Control" type="Control" parent="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer"]
+margin_left = 154.0
+margin_right = 226.0
+margin_bottom = 22.0
+size_flags_horizontal = 3
+
+[node name="BuyRight" type="VBoxContainer" parent="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer"]
+margin_left = 230.0
+margin_right = 380.0
+margin_bottom = 22.0
+rect_min_size = Vector2( 150, 0 )
+size_flags_horizontal = 4
+
+[node name="BuyButton" type="Button" parent="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/HBoxContainer/BuyRight"]
+margin_right = 150.0
+margin_bottom = 22.0
+
+[node name="Control" type="Control" parent="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer"]
+margin_top = 26.0
+margin_right = 380.0
+margin_bottom = 104.0
+size_flags_vertical = 3
+
+[node name="ContinueButton" type="Button" parent="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer"]
+margin_left = 147.0
+margin_top = 108.0
+margin_right = 232.0
+margin_bottom = 130.0
+size_flags_horizontal = 4
+text = "Continue"
 
 [node name="TransitionLayer" type="CanvasLayer" parent="."]
 
 [node name="TransitionSprite" type="Sprite" parent="TransitionLayer"]
-visible = false
+pause_mode = 2
 position = Vector2( 240, 136 )
 z_index = 100
 
@@ -419,3 +510,4 @@ format = 1
 
 [connection signal="pressed" from="MainMenu/MainMenuRoot/MarginContainer/HBoxContainer/VBoxContainer/StartButton" to="." method="_on_StartButton_pressed"]
 [connection signal="pressed" from="MainMenu/MainMenuRoot/MarginContainer/HBoxContainer/VBoxContainer/ExitButton" to="." method="_on_ExitButton_pressed"]
+[connection signal="pressed" from="GameOverlay/SuccessScreen/MarginContainer/VBoxContainer/ContinueButton" to="." method="_on_ContinueButton_pressed"]

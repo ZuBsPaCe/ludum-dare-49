@@ -302,6 +302,8 @@ func fill_tilemap(map:Map):
 	
 	var coord := Coord.new()
 	
+	var orbs := 0
+	
 	for y in map.height:
 		for x in map.width:
 			var tiletype = map.get_item(x, y)
@@ -312,5 +314,8 @@ func fill_tilemap(map:Map):
 				coord.y = y
 				var orb = Globals.create_orb(coord.to_center_pos())
 				map.set_orb(x, y, orb)
+				orbs += 1
 			else:
 				map.set_orb(x, y, null)
+				
+	Status.coins_to_pickup = orbs

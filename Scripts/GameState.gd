@@ -3,5 +3,7 @@ enum GameState {
 	MAIN_MENU,
 	NEW_GAME,
 	LEVEL,
-	DEATH
+	DEATH,
+	LEVEL_SUCCESS,
+	NEXT_LEVEL
 }
