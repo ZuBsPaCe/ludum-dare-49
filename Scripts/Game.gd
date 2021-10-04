@@ -20,6 +20,8 @@ const monster_hurt := preload("res://Sounds/MonsterHurt.wav")
 const level_start_klick := preload("res://Sounds/LevelStartKlick.wav")
 const monster_fire1 := preload("res://Sounds/MonsterFire.wav")
 const level_done := preload("res://Sounds/LevelDone.wav")
+const mag_empty := preload("res://Sounds/EmptyMag.wav")
+const mag_filled := preload("res://Sounds/MagFilled.wav")
 
 const mouse_cursor := preload("res://Art/Cursor.png")
 
@@ -96,6 +98,10 @@ func _ready():
 	sounds.register(SoundType.MONSTER_FIRE, monster_fire1, 70)
 	
 	sounds.register(SoundType.LEVEL_SUCCESS, level_done, 70)
+	
+	
+	sounds.register(SoundType.MAG_EMPTY, mag_empty, 70)
+	sounds.register(SoundType.MAG_FILLED, mag_filled, 70)
 	
 	
 	Globals.connect("signal_switch_game_state", self,"_on_signal_switch_game_state")
@@ -256,6 +262,16 @@ func switch_game_state(new_state) -> void:
 		_:
 			assert(false, "Unknown game state %s" % new_state)
 			
+			
+var level_sizes := [
+	Coord.new(16, 12),
+	Coord.new(17, 13),
+	Coord.new(18, 14),
+	Coord.new(22, 12),
+	Coord.new(16, 16),
+	Coord.new(22, 15),
+	Coord.new(30, 16),
+]
 
 func start_level():
 	
@@ -265,19 +281,23 @@ func start_level():
 	game_overlay_root.visible = true
 
 
-	
-	var map:Map
-	
-	if Status.level == 0:
-		map = Map.new(16, 12)
-	elif Status.level == 1:
-		map = Map.new(19, 13)
-	elif Status.level == 2:
-		map = Map.new(22, 14)
-	elif Status.level == 3:
-		map = Map.new(25, 15)
-	else:
-		map = Map.new(30, 16)
+#	if Status.level == 0:
+#		increase_size = true
+#
+#	var map:Map
+#
+#	var width := 16 + Status.level
+#	var height := 12 + Status.level
+#
+#	if width > 30:
+#		width = 30
+#
+#	if height > 16:
+#		height = 16
+
+	var size = level_sizes[Status.level % level_sizes.size()]
+
+	var map := Map.new(size.x, size.y)
 
 	randomize()
 	level_seed = randi()
@@ -285,7 +305,7 @@ func start_level():
 	
 	Mapper.generate_map(map, level_seed)
 	
-	var full_map := Map.new(30, 16)
+	var full_map := Map.new(30, 17)
 	for y in full_map.height:
 		for x in full_map.width:
 			full_map.set_item(x, y, TileType.BLOCKED_WALL)
@@ -351,10 +371,9 @@ func spawn_monster():
 	elif Status.level == 1:
 		monster_types = [MonsterType.GHOST, MonsterType.JELLY]
 	elif Status.level == 2:
-		if level_seed % 2 == 0:
-			monster_types = [MonsterType.GHOST, MonsterType.JELLY, MonsterType.TANK]
-		else:
-			monster_types = [MonsterType.GHOST, MonsterType.JELLY, MonsterType.SPIKE]
+		monster_types = [MonsterType.GHOST, MonsterType.JELLY, MonsterType.TANK]
+	elif Status.level == 3:
+		monster_types = [MonsterType.GHOST, MonsterType.JELLY, MonsterType.SPIKE]
 	else:
 		 monster_types = [MonsterType.GHOST, MonsterType.JELLY, MonsterType.TANK, MonsterType.SPIKE]
 	
@@ -438,6 +457,9 @@ func update_shop():
 			
 		if option == ItemType.HEALTH && Status.health >= 3:
 			continue
+			
+		if option == ItemType.AMMO && Status.weapons.size() <= 1:
+			continue
 		
 		buy_options.append(option)
 		
@@ -471,27 +493,27 @@ func update_shop():
 		
 		match option:
 			ItemType.AMMO:
-				buy_coins.append(150)
+				buy_coins.append(200)
 				button.text = "Ammo"
 				
 			ItemType.HEALTH:
-				buy_coins.append(300)
+				buy_coins.append(250)
 				button.text = "Health"
 				
 			ItemType.PLAYER_SPEED:
-				buy_coins.append(400)
+				buy_coins.append(250)
 				button.text = "Speed"
 				
 			ItemType.PLAYER_RELOAD:
-				buy_coins.append(400)
+				buy_coins.append(300)
 				button.text = "Fast reload"
 				
 			ItemType.MACHINEGUN:
-				buy_coins.append(500)
+				buy_coins.append(300)
 				button.text = "Machinegun"
 				
 			ItemType.SHOTGUN:
-				buy_coins.append(600)
+				buy_coins.append(350)
 				button.text = "Shotgun"
 				
 			_:
@@ -517,11 +539,11 @@ func update_shop():
 				button.text = "Tired"
 				
 			ItemType.FAST_MONSTER:
-				money_coins.append(250)
+				money_coins.append(200)
 				button.text = "Fast monster"
 				
 			ItemType.STRONG_MONSTER:
-				money_coins.append(250)
+				money_coins.append(200)
 				button.text = "Strong monster"
 				
 			

@@ -282,7 +282,7 @@ func _set_tile_on_tilemap(x:int, y:int, tiletype):
 			_tilemap.set_cell(x, y, 1)
 			
 		TileType.BLOCKED_WALL:
-			_tilemap.set_cell(x, y, 0)
+			_tilemap.set_cell(x, y, 2)
 			
 		TileType.BLOCKED_FLOOR:
 			_tilemap.set_cell(x, y, 1)

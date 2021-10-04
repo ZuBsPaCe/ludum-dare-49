@@ -54,6 +54,9 @@ var _hurted_cooldown := Cooldown.new()
 var _rounds_rect_front_tween : Tween
 var _rounds_rect_back_tween : Tween
 
+var _reloaded_hint := false
+var _empty_mag_sound_cooldown := Cooldown.new()
+
 func _ready():
 	_hurted_cooldown.setup(self, 1.8, true, Cooldown.STOPPED)
 	
@@ -62,6 +65,16 @@ func _ready():
 	
 	_rounds_rect_back_tween = Tween.new()
 	add_child(_rounds_rect_back_tween)
+	
+	_empty_mag_sound_cooldown.setup(self, 0.25, true)
+	
+func _process(delta):
+	if current_weapon_index < reload_cooldowns.size():
+		if !reload_cooldowns[current_weapon_index].done:
+			_reloaded_hint = true
+		elif _reloaded_hint:
+			_reloaded_hint = false
+			Globals.play_sound(SoundType.MAG_FILLED)
 
 func setup(
 	tex_heart1:TextureRect,
@@ -93,6 +106,11 @@ func start_game():
 	current_weapon_index = 0
 	
 	items.clear()
+	weapons.clear()
+	weapon_mags.clear()
+	weapon_rounds.clear()
+	fire_cooldowns.clear()
+	reload_cooldowns.clear()
 	
 	max_rounds_blaster = 5
 	max_rounds_machinegun = 20
@@ -160,6 +178,7 @@ func add_coin():
 	
 	if coins_to_pickup <= 0:# || true: # || coins > level * 10:
 		#change_coins(1000)
+		Globals.play_sound(SoundType.LEVEL_SUCCESS)
 		Globals.switch_game_state(GameState.LEVEL_SUCCESS)
 	else:
 		Globals.play_sound(SoundType.COIN_PICKUP)
@@ -184,7 +203,7 @@ func add_health():
 func add_ammo():
 	
 	for i in range(weapon_mags.size()):
-		weapon_mags[i] += 6
+		weapon_mags[i] += 3
 	
 	_update_rounds(false, true)
 	
@@ -205,7 +224,7 @@ func add_item(item):
 	
 	if item == ItemType.MACHINEGUN:
 		weapons.append(WeaponType.MACHINEGUN)
-		weapon_mags.append(6)
+		weapon_mags.append(3)
 		weapon_rounds.append(max_rounds_machinegun)
 		var fire_cooldown = Cooldown.new()
 		fire_cooldown.setup(self, 0.1, true)
@@ -219,7 +238,7 @@ func add_item(item):
 			
 	if item == ItemType.SHOTGUN:
 		weapons.append(WeaponType.SHOTGUN)
-		weapon_mags.append(6)
+		weapon_mags.append(3)
 		weapon_rounds.append(max_rounds_shotgun)
 		var fire_cooldown = Cooldown.new()
 		fire_cooldown.setup(self, 1.0, true)
@@ -235,12 +254,18 @@ func add_item(item):
 func try_fire() -> bool:
 	var rounds:int = weapon_rounds[current_weapon_index]
 	if rounds == 0:
+		if _empty_mag_sound_cooldown.done:
+			_empty_mag_sound_cooldown.restart()
+			Globals.play_sound(SoundType.MAG_EMPTY)
 		return false
 	
 	if !fire_cooldowns[current_weapon_index].done:
 		return false
 		
 	if !reload_cooldowns[current_weapon_index].done:
+		if _empty_mag_sound_cooldown.done:
+			_empty_mag_sound_cooldown.restart()
+			Globals.play_sound(SoundType.MAG_EMPTY)
 		return false
 	
 	rounds -= 1
@@ -251,6 +276,9 @@ func try_fire() -> bool:
 	var do_reload := false
 	
 	if rounds <= 0:
+		
+		_empty_mag_sound_cooldown.restart()
+		
 		if weapons[current_weapon_index] == WeaponType.BLASTER:
 			do_reload = true
 		else:
@@ -278,6 +306,11 @@ func select_next_weapon():
 	
 	_show_current_weapon_hint()
 	
+	_reloaded_hint = !reload_cooldowns[current_weapon_index].done
+
+	
+	
+	
 func select_prev_weapon():
 	current_weapon_index -= 1
 	if current_weapon_index < 0:
@@ -286,6 +319,8 @@ func select_prev_weapon():
 	_update_rounds(false, true)
 	
 	_show_current_weapon_hint()
+	
+	_reloaded_hint = !reload_cooldowns[current_weapon_index].done
 	
 func _show_current_weapon_hint():
 	var tween := Tween.new()
