@@ -66,6 +66,7 @@ func _play(stream: AudioStreamSample, volume: float, pos = null) -> void:
 
 	if player == null:
 		player = AudioStreamPlayer2D.new()
+		player.pause_mode = Node.PAUSE_MODE_PROCESS
 
 		if pos != null:
 			player.attenuation = 6.0

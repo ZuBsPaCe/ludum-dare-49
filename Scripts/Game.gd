@@ -19,6 +19,7 @@ const player_dies := preload("res://Sounds/PlayerDies.wav")
 const monster_hurt := preload("res://Sounds/MonsterHurt.wav")
 const level_start_klick := preload("res://Sounds/LevelStartKlick.wav")
 const monster_fire1 := preload("res://Sounds/MonsterFire.wav")
+const level_done := preload("res://Sounds/LevelDone.wav")
 
 const mouse_cursor := preload("res://Art/Cursor.png")
 
@@ -93,6 +94,8 @@ func _ready():
 	sounds.register(SoundType.LEVEL_START_KLICK, level_start_klick, 70)
 	
 	sounds.register(SoundType.MONSTER_FIRE, monster_fire1, 70)
+	
+	sounds.register(SoundType.LEVEL_SUCCESS, level_done, 70)
 	
 	
 	Globals.connect("signal_switch_game_state", self,"_on_signal_switch_game_state")
