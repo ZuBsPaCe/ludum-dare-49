@@ -131,19 +131,19 @@ func create_monster(pos: Vector2, monster_type) -> void:
 		MonsterType.GHOST:
 			scene = _ghost_scene
 			speed = 48.0
-			health = 3
+			health = 2
 		MonsterType.JELLY:
 			scene = _jelly_scene
 			speed = 32.0
-			health = 3
+			health = 2
 		MonsterType.SPIKE:
 			scene = _spike_scene
 			speed = 16.0
-			health = 5
+			health = 3
 		MonsterType.TANK:
 			scene = _tank_scene
 			speed = 12.0
-			health = 8
+			health = 4
 		_:
 			assert(false)
 	
