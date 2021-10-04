@@ -262,13 +262,49 @@ func start_level():
 	game_overlay_root.visible = true
 
 
-	var map := Map.new(30, 17)
+	
+	var map:Map
+	
+	if Status.level == 0:
+		map = Map.new(16, 12)
+	elif Status.level == 1:
+		map = Map.new(19, 13)
+	elif Status.level == 2:
+		map = Map.new(22, 14)
+	elif Status.level == 3:
+		map = Map.new(25, 15)
+	else:
+		map = Map.new(30, 16)
 
 	randomize()
 	level_seed = randi()
 	#level_seed = 1476648210
 	
 	Mapper.generate_map(map, level_seed)
+	
+	var full_map := Map.new(30, 16)
+	for y in full_map.height:
+		for x in full_map.width:
+			full_map.set_item(x, y, TileType.BLOCKED_WALL)
+	
+	var offset_x := (full_map.width - map.width) / 2
+	var offset_y := (full_map.height - map.height) / 2
+	for y in map.height:
+		for x in map.width:
+			full_map.set_item(x + offset_x, y + offset_y, map.get_item(x, y))
+			
+#	var door_coord:Coord
+#var monster_spawn_coords := []
+#var player_spawn_coord:Coord
+
+	full_map.door_coord = Coord.new(map.door_coord.x + offset_x, map.door_coord.y + offset_y)
+	full_map.player_spawn_coord = Coord.new(map.player_spawn_coord.x + offset_x, map.player_spawn_coord.y + offset_y)
+	
+	for coord in map.monster_spawn_coords:
+		full_map.monster_spawn_coords.append(Coord.new(coord.x + offset_x, coord.y + offset_y))
+	
+	map = full_map
+	
 	Mapper.fill_tilemap(map)
 	
 	Globals.map = map
