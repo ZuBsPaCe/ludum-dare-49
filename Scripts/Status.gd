@@ -45,6 +45,7 @@ var _tex_heart2:TextureRect
 var _tex_heart3:TextureRect
 var _coin_label:Label
 var _mags_label:Label
+var _gun_label:Label
 var _rounds_rect_front:ColorRect
 var _rounds_rect_back:ColorRect
 
@@ -68,6 +69,7 @@ func setup(
 	tex_heart3:TextureRect,
 	coin_label:Label,
 	mags_label:Label,
+	gun_label:Label,
 	rounds_rect_front:ColorRect,
 	rounds_rect_back:ColorRect):
 		
@@ -76,6 +78,7 @@ func setup(
 	_tex_heart3 = tex_heart3
 	_coin_label = coin_label
 	_mags_label = mags_label
+	_gun_label = gun_label
 	_rounds_rect_front = rounds_rect_front
 	_rounds_rect_back = rounds_rect_back
 	
@@ -123,10 +126,12 @@ func start_game():
 	_update_health_tex()
 	_update_coin_label()
 	_update_rounds(false)
+	_show_current_weapon_hint()
 	
 
 func start_level():
 	level += 1
+	_show_current_weapon_hint()
 	
 func hurt_player():
 	if health <= 0:
@@ -153,7 +158,7 @@ func add_coin():
 	
 	_update_coin_label()
 	
-	if coins_to_pickup <= 0:# || true: # || coins > level * 10:
+	if coins_to_pickup <= 0: #|| true: # || coins > level * 10:
 		#coins += 200
 		Globals.switch_game_state(GameState.LEVEL_SUCCESS)
 	else:
@@ -179,7 +184,7 @@ func add_health():
 func add_ammo():
 	
 	for i in range(weapon_mags.size()):
-		weapon_mags[i] += 3
+		weapon_mags[i] += 6
 	
 	_update_rounds(false, true)
 	
@@ -200,7 +205,7 @@ func add_item(item):
 	
 	if item == ItemType.MACHINEGUN:
 		weapons.append(WeaponType.MACHINEGUN)
-		weapon_mags.append(3)
+		weapon_mags.append(6)
 		weapon_rounds.append(max_rounds_machinegun)
 		var fire_cooldown = Cooldown.new()
 		fire_cooldown.setup(self, 0.1, true)
@@ -214,7 +219,7 @@ func add_item(item):
 			
 	if item == ItemType.SHOTGUN:
 		weapons.append(WeaponType.SHOTGUN)
-		weapon_mags.append(3)
+		weapon_mags.append(6)
 		weapon_rounds.append(max_rounds_shotgun)
 		var fire_cooldown = Cooldown.new()
 		fire_cooldown.setup(self, 1.0, true)
@@ -271,12 +276,47 @@ func select_next_weapon():
 	
 	_update_rounds(false, true)
 	
+	_show_current_weapon_hint()
+	
 func select_prev_weapon():
 	current_weapon_index -= 1
 	if current_weapon_index < 0:
 		current_weapon_index = weapons.size() - 1
 	
 	_update_rounds(false, true)
+	
+	_show_current_weapon_hint()
+	
+func _show_current_weapon_hint():
+	var tween := Tween.new()
+	add_child(tween)
+	
+	match weapons[current_weapon_index]:
+		WeaponType.BLASTER:
+			_gun_label.text = "BLASTER"
+		WeaponType.MACHINEGUN:
+			_gun_label.text = "MACH.GUN"
+		WeaponType.SHOTGUN:
+			_gun_label.text = "SHOTGUN"
+		_:
+			_gun_label.text = "???"
+			
+	_gun_label.modulate = Color.white
+	
+	# warning-ignore:return_value_discarded
+	tween.interpolate_property(
+		_gun_label,
+		"modulate",
+		Color.white,
+		Tools.get_alpha_0(Color.white),
+		3.0,
+		Tween.TRANS_LINEAR, 
+		Tween.EASE_IN_OUT)
+		
+	# warning-ignore:return_value_discarded
+	tween.start()
+	
+	
 
 func _update_health_tex():
 	_tex_heart1.texture = _full_heart_tex if health >= 1 else _empty_heart_tex

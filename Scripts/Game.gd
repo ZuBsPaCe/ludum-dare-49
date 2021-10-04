@@ -101,6 +101,7 @@ func _ready():
 		$GameOverlay/MarginContainer/GridContainer/HBoxContainer/TexHeart3,
 		$GameOverlay/MarginContainer/GridContainer/HBoxContainer2/CoinLabel,
 		$GameOverlay/MarginContainer/GridContainer/HBoxContainer3/MagsLabel,
+		$GameOverlay/MarginContainer/GridContainer/HBoxContainer3/RoundsContainer/GunLabel,
 		$GameOverlay/MarginContainer/GridContainer/HBoxContainer3/RoundsContainer/RoundsRectFront,
 		$GameOverlay/MarginContainer/GridContainer/HBoxContainer3/RoundsContainer/RoundsRectBack)
 	
@@ -283,7 +284,7 @@ func start_level():
 	door_open = false
 	first_wait_done = false
 	waiting_monsters = 0
-	var spawn_interval := 5 - Status.level
+	var spawn_interval = 5.0 - Status.level * 0.5
 	if spawn_interval < 1:
 		spawn_interval = 0
 	
