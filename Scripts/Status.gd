@@ -328,7 +328,10 @@ func _update_coin_label():
 
 	
 func _update_rounds(reload:bool, fast = false):
-	_mags_label.text = str(weapon_mags[current_weapon_index])
+	if weapons[current_weapon_index] == WeaponType.BLASTER:
+		_mags_label.text = "-"
+	else:
+		_mags_label.text = str(weapon_mags[current_weapon_index])
 	
 	
 	var rounds:int
