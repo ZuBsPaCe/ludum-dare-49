@@ -99,15 +99,16 @@ func start_game():
 	max_reload_cooldown_machinegun = 4.0
 	max_reload_cooldown_shotgun = 5.0
 	
-	weapons.append(WeaponType.BLASTER)
-	weapon_mags.append(0)
-	weapon_rounds.append(max_rounds_blaster)
-	var fire_cooldown := Cooldown.new()
-	fire_cooldown.setup(self, 0.5, true)
-	fire_cooldowns.append(fire_cooldown)
-	var reload_cooldown := Cooldown.new()
-	reload_cooldown.setup(self, max_reload_cooldown_blaster, true)
-	reload_cooldowns.append(reload_cooldown)
+	if !(WeaponType.BLASTER in weapons):
+		weapons.append(WeaponType.BLASTER)
+		weapon_mags.append(0)
+		weapon_rounds.append(max_rounds_blaster)
+		var fire_cooldown := Cooldown.new()
+		fire_cooldown.setup(self, 0.5, true)
+		fire_cooldowns.append(fire_cooldown)
+		var reload_cooldown := Cooldown.new()
+		reload_cooldown.setup(self, max_reload_cooldown_blaster, true)
+		reload_cooldowns.append(reload_cooldown)
 	
 #	weapons.append(WeaponType.MACHINEGUN)
 #	weapon_mags.append(3)
