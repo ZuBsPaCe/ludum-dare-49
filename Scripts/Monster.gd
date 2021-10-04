@@ -74,13 +74,14 @@ func setup(pos:Vector2, p_monsterType, p_health, p_speed):
 			_shoot_animation = true
 			_turn_sprites = true
 	
+	for item in Status.items:
+		if item == ItemType.FAST_MONSTER:
+			if monster_type != MonsterType.GHOST:
+				_speed += 8.0
 	
-	if ItemType.FAST_MONSTER in Status.items:
-		if monster_type != MonsterType.GHOST:
-			_speed += 16.0
-			
-	if ItemType.STRONG_MONSTER in Status.items:
-		_health += 5
+	for item in Status.items:
+		if item == ItemType.STRONG_MONSTER:
+			_health += 1
 	
 	_check_cooldown = Cooldown.new()
 	_check_cooldown.setup(self, 1.0, true)

@@ -403,9 +403,10 @@ func update_shop():
 		var option = available_money[rnd]
 		
 		available_money.remove(rnd)
-		
-		if option in Status.items:
-			continue
+
+		if option != ItemType.FAST_MONSTER && option != ItemType.STRONG_MONSTER:
+			if option in Status.items:
+				continue
 			
 		money_options.append(option)
 

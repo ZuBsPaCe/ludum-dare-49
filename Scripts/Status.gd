@@ -158,8 +158,8 @@ func add_coin():
 	
 	_update_coin_label()
 	
-	if coins_to_pickup <= 0: #|| true: # || coins > level * 10:
-		#coins += 200
+	if coins_to_pickup <= 0:# || true: # || coins > level * 10:
+		#change_coins(1000)
 		Globals.switch_game_state(GameState.LEVEL_SUCCESS)
 	else:
 		Globals.play_sound(SoundType.COIN_PICKUP)
