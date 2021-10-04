@@ -19,6 +19,7 @@ const player_dies := preload("res://Sounds/PlayerDies.wav")
 const monster_hurt := preload("res://Sounds/MonsterHurt.wav")
 const level_start_klick := preload("res://Sounds/LevelStartKlick.wav")
 
+const mouse_cursor := preload("res://Art/Cursor.png")
 
 export var player_scene:PackedScene
 export var bullet_scene:PackedScene
@@ -57,6 +58,8 @@ var level_seed:int
 
 
 func _ready():
+	Input.set_custom_mouse_cursor(mouse_cursor, Input.CURSOR_ARROW, Vector2(23.5, 23.5))
+	
 	Globals.setup(
 		$Camera2D,
 		$EntityContainer,
