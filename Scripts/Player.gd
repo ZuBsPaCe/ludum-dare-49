@@ -103,9 +103,9 @@ func _process(_delta):
 				
 				for i in 5:
 					dir = weapon_dir
-					dir = dir.rotated(5.0 - randf() * 10.0)
+					dir = dir.rotated(deg2rad(10.0 - randf() * 20.0))
 					
-					Globals.create_bullet(weapon.global_position, dir, true)
+					create_bullet_delayed(weapon.global_position, dir)
 				
 			else:
 				Globals.create_bullet(weapon.global_position, weapon_dir, true)
@@ -115,6 +115,14 @@ func _input(_event):
 		Status.select_next_weapon()
 	elif Input.is_action_pressed("prev_weapon"):
 		Status.select_prev_weapon()
+
+func create_bullet_delayed(from_pos, dir):
+	if randf() < 0.5:
+		Globals.create_bullet(from_pos, dir, true)
+	else:
+		yield(get_tree().create_timer(randf() * 0.05), "timeout")
+		Globals.create_bullet(from_pos, dir, true)
+
 
 
 
