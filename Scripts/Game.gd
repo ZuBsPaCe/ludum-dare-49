@@ -53,6 +53,8 @@ var first_wait_cooldown := Cooldown.new()
 
 var close_door_cooldown := Cooldown.new()
 
+var level_seed:int
+
 
 func _ready():
 	Globals.setup(
@@ -251,10 +253,15 @@ func start_level():
 	
 	
 	game_overlay_root.visible = true
-	
+
+
 	var map := Map.new(30, 17)
+
+	randomize()
+	level_seed = randi()
+	#level_seed = 1476648210
 	
-	Mapper.generate_map(map)
+	Mapper.generate_map(map, level_seed)
 	Mapper.fill_tilemap(map)
 	
 	Globals.map = map
@@ -297,10 +304,13 @@ func spawn_monster():
 		monster_types = [MonsterType.GHOST]
 	elif Status.level == 1:
 		monster_types = [MonsterType.GHOST, MonsterType.JELLY]
-	elif Status.level == 3:
-		monster_types = [MonsterType.GHOST, MonsterType.JELLY, MonsterType.SPIKE]
+	elif Status.level == 2:
+		if level_seed % 2 == 0:
+			monster_types = [MonsterType.GHOST, MonsterType.JELLY, MonsterType.TANK]
+		else:
+			monster_types = [MonsterType.GHOST, MonsterType.JELLY, MonsterType.SPIKE]
 	else:
-		 monster_types = [MonsterType.GHOST, MonsterType.JELLY, MonsterType.SPIKE, MonsterType.TANK]
+		 monster_types = [MonsterType.GHOST, MonsterType.JELLY, MonsterType.TANK, MonsterType.SPIKE]
 	
 	var monster_type = Tools.rand_item(monster_types)
 	var spawn_coord:Coord = Tools.rand_item(Globals.map.monster_spawn_coords)

@@ -16,14 +16,9 @@ func setup(
 	_tilemap = p_tilemap
 
 
-func generate_map(map:Map):
-	randomize()
-	var random_seed = randi()
-	#random_seed = 1476648211
-	
-	seed(random_seed)
-	print("Seed: %s" % random_seed)
-
+func generate_map(map:Map, level_seed:int):
+	seed(level_seed)
+	print("Seed: %s" % level_seed)
 
 	for y in map.height:
 		for x in map.width:

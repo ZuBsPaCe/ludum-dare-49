@@ -26,7 +26,7 @@
 [ext_resource path="res://Sprites/Monster/GhostTitle.png" type="Texture" id=24]
 [ext_resource path="res://Sprites/Player/PlayerTitle.png" type="Texture" id=25]
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id=1]
 resource_name = "Blink"
 length = 0.1
 loop = true
@@ -44,13 +44,13 @@ tracks/0/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0.392157 ) ]
 }
 
-[sub_resource type="ViewportTexture" id=1]
+[sub_resource type="ViewportTexture" id=2]
 viewport_path = NodePath("ShadowViewport")
 
-[sub_resource type="ConvexPolygonShape2D" id=2]
+[sub_resource type="ConvexPolygonShape2D" id=3]
 points = PoolVector2Array( 0, 0, 16, 0, 16, 16, 0, 16 )
 
-[sub_resource type="TileSet" id=3]
+[sub_resource type="TileSet" id=4]
 0/name = "Wall_16.png 0"
 0/texture = ExtResource( 4 )
 0/tex_offset = Vector2( 0, 0 )
@@ -61,14 +61,14 @@ points = PoolVector2Array( 0, 0, 16, 0, 16, 16, 0, 16 )
 0/navigation_offset = Vector2( 0, 0 )
 0/shape_offset = Vector2( 0, 0 )
 0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-0/shape = SubResource( 2 )
+0/shape = SubResource( 3 )
 0/shape_one_way = false
 0/shape_one_way_margin = 1.0
 0/shapes = [ {
 "autotile_coord": Vector2( 0, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 2 ),
+"shape": SubResource( 3 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 } ]
 0/z_index = 0
@@ -425,7 +425,7 @@ valign = 2
 [node name="AnimationPlayer" type="AnimationPlayer" parent="GameOverlay/DeathScreen/DeathScreen"]
 pause_mode = 2
 autoplay = "Blink"
-anims/Blink = SubResource( 4 )
+anims/Blink = SubResource( 1 )
 
 [node name="SuccessScreen" type="Control" parent="GameOverlay"]
 pause_mode = 2
@@ -571,12 +571,12 @@ script = ExtResource( 2 )
 [node name="ShadowOverlay" type="Sprite" parent="."]
 visible = false
 material = ExtResource( 3 )
-texture = SubResource( 1 )
+texture = SubResource( 2 )
 
 [node name="TileMap" type="TileMap" parent="." groups=[
 "Tilemap",
 ]]
-tile_set = SubResource( 3 )
+tile_set = SubResource( 4 )
 cell_size = Vector2( 16, 16 )
 collision_mask = 0
 format = 1
