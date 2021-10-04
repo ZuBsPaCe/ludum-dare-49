@@ -192,6 +192,7 @@ func _physics_process(_delta):
 			if !_shoot_animation:
 				var dir:Vector2 = (Globals.player.position - self.position).normalized()
 				Globals.create_bullet(collision_shape.global_position + dir * 6.0, dir,  false)
+				Globals.play_sound(SoundType.MONSTER_FIRE, global_position)
 			else:
 				_is_shooting = true
 				animation_player.stop()
@@ -217,7 +218,7 @@ func hurt():
 	_health -= 1
 		
 	if _health == 0:
-		Globals.play_sound(SoundType.MONSTER_KILL)
+		Globals.play_sound(SoundType.MONSTER_KILL, global_position)
 		
 		animation_player.stop()
 		
@@ -241,7 +242,7 @@ func hurt():
 		#Globals.destroy_monster(self)
 		
 	else:
-		Globals.play_sound(SoundType.MONSTER_HURT)
+		Globals.play_sound(SoundType.MONSTER_HURT, global_position)
 	
 	
 	glow_sprite.visible = true
@@ -269,6 +270,7 @@ func hurt():
 
 
 func fire_spike():
+	Globals.play_sound(SoundType.MONSTER_FIRE, global_position)
 	for i in 6:
 		var angle := randf() * 2.0 * PI
 		var dir := Vector2.UP.rotated(angle)
@@ -289,4 +291,5 @@ func _fire_tank():
 		
 		dir_vec = dir_vec.rotated(deg2rad(randf() * 30.0 - 15.0))
 		
+		Globals.play_sound(SoundType.MONSTER_FIRE, global_position)
 		Globals.create_bullet(collision_shape.global_position, dir_vec, false, 256.0)
